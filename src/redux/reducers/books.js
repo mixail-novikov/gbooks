@@ -33,9 +33,6 @@ const getBookInfoFromBook = (book) => {
 
   const year = publishedDate && publishedDate.split('-')[0];
 
-  console.log(publishedDate);
-  console.log(year);
-
   return {
     authors,
     year,

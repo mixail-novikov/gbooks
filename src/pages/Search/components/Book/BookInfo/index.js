@@ -17,8 +17,6 @@ class BookInfo extends Component {
       return null;
     }
 
-    console.log(year);
-
     return (
       <p className="BookInfo">
         {authors && authors.length > 0 && <span className="BookInfo__item">{this.renderAuthors()}</span>}
