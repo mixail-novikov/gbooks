@@ -1,7 +1,14 @@
 .App {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 100%;
   flex-direction: column;
+  padding-top: 180px;
+}
+
+.App__logo {
+  margin-bottom: 23px;
+}
+
+.App__search-form {
+  margin-bottom: 31px;
 }

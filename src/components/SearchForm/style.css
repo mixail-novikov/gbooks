@@ -9,7 +9,7 @@
   border-radius: 1px;
   border: 1px solid #d9d9d9;
   border-top: 1px solid #c0c0c0;
-  padding: 1px 8px;
+  padding: 1px 7px;
   outline: none;
 }
 
@@ -29,10 +29,11 @@
   background-color: #357ae8;
   background-image: linear-gradient(to bottom, #4d90fe, #357ae8);
   outline: none;
-  width: 70px;
-  margin-left: 12px;
+  width: 72px;
+  margin-left: 10px;
 }
 
 .SearchForm__button-icon {
   vertical-align: middle;
+  margin-bottom: 1px;
 }
