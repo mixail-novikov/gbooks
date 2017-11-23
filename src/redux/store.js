@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { sagaMiddleware } from './saga';
 import { routerMiddleware } from './router';
 
-import rootReducer from './reducer';
+import rootReducer from './reducers';
 
 export default function configureStore(initialState) {
   return createStore(
