@@ -9,3 +9,6 @@
 ## BookInfo
 
 1. Вынести генерацию ссылки для поиска автора
+
+## В дальний ящик
+- Suggestions https://www.npmjs.com/package/suggestion
