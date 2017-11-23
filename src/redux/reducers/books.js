@@ -1,9 +1,9 @@
 import { createAction, createReducer } from 'redux-act';
 import sanitizeHtml from 'sanitize-html';
+import { get } from 'lodash';
 
 const getTitleFromBook = (book) => {
-  const { volumeInfo={} } = book;
-  const { title, subtitle } = volumeInfo;
+  const { title, subtitle } = get(book, 'volumeInfo', {});
 
   if (subtitle) {
     return `${title}: ${subtitle}`;
@@ -13,9 +13,8 @@ const getTitleFromBook = (book) => {
 };
 
 const getDescriptionFromBook = (book) => {
-  const { volumeInfo={}, searchInfo={} } = book;
-  const { textSnippet } = searchInfo;
-  const { description } = volumeInfo;
+  const textSnippet = get(book, 'searchInfo.textSnippet');
+  const description = get(book, 'volumeInfo.description');
 
   const desc = textSnippet || description;
 
@@ -29,31 +28,39 @@ const getDescriptionFromBook = (book) => {
 };
 
 const getBookInfoFromBook = (book) => {
-  const { volumeInfo={} } = book;
-  const { authors=[], publishedDate='' } = volumeInfo;
+  const publishedDate = get(book, 'volumeInfo.publishedDate', '');
+  const authors = get(book, 'volumeInfo.authors', []);
 
-  const year = publishedDate.split('-')[0];
-  const authorsStr = authors.join(', ');
+  const year = publishedDate && publishedDate.split('-')[0];
 
-  return [authorsStr, year].filter(v => v).join(' - ');
+  console.log(publishedDate);
+  console.log(year);
+
+  return {
+    authors,
+    year,
+  }
 };
 
 const getImageUrlFromBook = (book) => {
-  const { volumeInfo={} } = book;
-  const { imageLinks={} } = volumeInfo;
-  const { smallThumbnail, thumbnail } = imageLinks;
+  const { smallThumbnail, thumbnail } = get(book, 'volumeInfo.imageLinks', {})
 
-  return smallThumbnail || thumbnail;
+  return thumbnail || smallThumbnail;
 };
 
 const getLinksFromBook = (book) => {
-  const { volumeInfo={}, accessInfo={} } = book;
-  const { previewLink } = volumeInfo;
-  const { embeddable } = accessInfo;
+  const previewLink = get(book, 'volumeInfo.previewLink', '');
+  const firstIndustryIdentifier = get(book, 'volumeInfo.industryIdentifiers[0]', {});
+  const embeddable = get(book, 'accessInfo.embeddable', false);
+
+  const isbn = firstIndustryIdentifier.identifier;
+  const id = get(book, 'id');
+  const greenLink = isbn ? `https://books.google.com/books?isbn=${isbn}` : `https://books.google.com/books?id=${id}`;
 
   return {
     link: previewLink,
     previewLink: embeddable ? previewLink : '',
+    greenLink,
   }
 };
 
@@ -63,16 +70,14 @@ const transformBook = (book) => {
 
   const title = getTitleFromBook(book);
   const description = getDescriptionFromBook(book);
-  const info = getBookInfoFromBook(book);
   const imageUrl = getImageUrlFromBook(book);
-
 
   return {
     id,
     title,
     description,
-    info,
     imageUrl,
+    ...getBookInfoFromBook(book),
     ...getLinksFromBook(book),
   }
 };

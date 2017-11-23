@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { array } from 'prop-types';
+import { array, string } from 'prop-types';
+import c from 'classnames';
 
 import './style.css';
 
@@ -10,13 +11,14 @@ import { selectBooks } from '../../../../redux/reducers/books';
 class BooksList extends Component {
   static propTypes = {
     books: array,
+    className: string,
   };
 
   render() {
-    const { books } = this.props;
+    const { books, className } = this.props;
     return (
-      <div className="BooksList">
-        {books.map(book => <Book key={book.id} {...book} />)}
+      <div className={c('BooksList', className)}>
+        {books.map(book => <Book className="BooksList__item" key={book.id} {...book} />)}
       </div>
     );
   }

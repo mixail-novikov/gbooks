@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 import SearchForm from '../Main/components/SearchForm';
 import BooksList from './components/BooksList';
@@ -11,7 +10,7 @@ class Search extends Component {
     return (
       <div className="Search">
         <SearchForm />
-        <BooksList />
+        <BooksList className="Search__books-list" />
       </div>
     );
   }

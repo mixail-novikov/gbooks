@@ -1,3 +1,51 @@
 .Book {
-  
+
+}
+
+.Book__title {
+  margin: 0;
+  display: block;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.Book__content {
+  display: flex;
+}
+
+.Book__image-holder {
+  padding-top: 5px;
+  width: 69px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.Book__image {
+  max-width: 60px;
+  border: 1px solid #ebebeb;
+}
+
+.Book__text {
+  flex-grow: 1;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: -1px;
+}
+
+.Book__green-link {
+  margin: 0;
+  font-size: 14px;
+  color: #006621;
+}
+
+.Book__description {
+  margin: 0;
+}
+
+.Book a {
+  text-decoration: none;
+}
+
+.Book a:hover {
+  text-decoration: underline;
 }
