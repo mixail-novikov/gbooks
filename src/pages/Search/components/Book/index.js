@@ -6,31 +6,26 @@ import './style.css';
 
 class Book extends Component {
   static propTypes = {
-    volumeInfo: shape({
-      title: string,
-    }),
-    searchInfo: shape({
-      textSnippet: string,
-    }),
+    id: string,
+    title: string,
+    description: string,
+    info: string,
+    imageUrl: string,
+    previewLink: string,
+    link: string,
   };
 
   render() {
-    const { volumeInfo={}, searchInfo={} } = this.props;
-    const { title, subtitle, authors=[], publishedDate, previewLink } = volumeInfo;
-    const { textSnippet } = searchInfo;
-
-    const description = sanitizeHtml(textSnippet, {
-      allowedTags: ['b'],
-    });
+    const { title, description, info, imageUrl, previewLink, link } = this.props;
 
     return (
       <div className="Book">
         <h2>
-          <a target="_blank" href={previewLink}>{title}:{subtitle}</a>
+          <a target="_blank" href={link}>{title}</a>
         </h2>
-        {authors.join(', ')} - {publishedDate} <a target="_blank" href={previewLink}>Preview</a>
-        <br />
-        <p dangerouslySetInnerHTML={{__html: description}}/>
+        {(info || previewLink) && <p>{info} {previewLink ? <a target="_blank" href={previewLink}>Preview</a> : 'No Preview'}</p>}
+        {description && <p dangerouslySetInnerHTML={{__html: description}} />}
+        <img src={imageUrl} />
       </div>
     );
   }
