@@ -1,14 +1,14 @@
-.AppIntro {
+.Intro {
   font-size: 14px;
   text-align: center;
 }
 
-.AppIntro__p {
+.Intro__p {
   margin: 0;
   margin-bottom: 13px;
 }
 
-.AppIntro__library-link {
+.Intro__library-link {
   font-size: 13px;
   text-decoration: none;
 }

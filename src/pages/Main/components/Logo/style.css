@@ -1,12 +1,12 @@
-.AppLogo {
+.Logo {
   position: relative;
 }
 
-.AppLogo-image {
+.Logo-image {
   width: 272px;
 }
 
-.AppLogo-text {
+.Logo-text {
   position: absolute;
   right: 13px;
   bottom: 4px;

@@ -1,14 +1,14 @@
-.App {
+.MainPage {
   display: flex;
   align-items: center;
   flex-direction: column;
   padding-top: 180px;
 }
 
-.App__logo {
+.MainPage__logo {
   margin-bottom: 23px;
 }
 
-.App__search-form {
+.MainPage__search-form {
   margin-bottom: 31px;
 }

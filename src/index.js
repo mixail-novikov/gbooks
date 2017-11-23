@@ -5,7 +5,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import './index.css';
 
-import App from './components/App';
+import Pages from './pages';
 import registerServiceWorker from './registerServiceWorker';
 import createStore from './redux';
 
@@ -14,7 +14,7 @@ const { store, runSaga, history } = createStore();
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <App />
+      <Pages />
     </ConnectedRouter>
   </Provider>
 , document.getElementById('root'));
