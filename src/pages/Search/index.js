@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { restoreSearchState } from '../../redux/reducers/search';
 
-import SearchForm from '../Main/components/SearchForm';
+import SearchForm from './components/SearchForm';
 import BooksList from './components/BooksList';
 
 import './style.css';
@@ -22,7 +22,9 @@ class Search extends Component {
   render() {
     return (
       <div className="Search">
+        <br />
         <SearchForm />
+        <br />
         <BooksList className="Search__books-list" />
       </div>
     );
