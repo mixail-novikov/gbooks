@@ -1,6 +1,5 @@
 .SearchFormInner {
-  margin: 0 13px;
-
+  min-width: 632px;
   position: relative;
   background-color: #fff;
   height: 44px;

@@ -1,7 +1,11 @@
-.Search {
+.SearchPage {
 
 }
 
-.Search__books-list {
+.SearchPage__content {
   margin-left: 168px;
+}
+
+.SearchPage__results {
+  margin-bottom: 9px;
 }

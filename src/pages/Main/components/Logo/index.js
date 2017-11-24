@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { string } from 'prop-types';
 import c from 'classnames';
 
-import logoPath from './logo.png';
+import LogoImage from '../../../../components/Logo';
 import './style.css';
 
 class Logo extends Component {
@@ -13,7 +13,7 @@ class Logo extends Component {
   render() {
     return (
       <div className={c('Logo', this.props.className)}>
-        <img className="Logo-image" src={logoPath} />
+        <LogoImage className="Logo-image" />
         <div className="Logo-text">Books</div>
       </div>
     );
