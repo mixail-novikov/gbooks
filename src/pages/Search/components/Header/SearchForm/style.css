@@ -55,6 +55,7 @@
 
 .SearchFormInner__button_speech {
   width: 24px;
+  padding-top: 1px;
 }
 
 .SearchFormInner__search-icon {
