@@ -10,6 +10,7 @@ import registerServiceWorker from './registerServiceWorker';
 import createStore from './redux';
 
 const { store, runSaga, history } = createStore();
+runSaga();
 
 ReactDOM.render(
   <Provider store={store}>
@@ -20,4 +21,3 @@ ReactDOM.render(
 , document.getElementById('root'));
 
 registerServiceWorker();
-runSaga();
