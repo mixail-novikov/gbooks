@@ -5,6 +5,7 @@
   - SpeechAPI
   - Параметры сортировки и т.д.
 - Пагинация
+- `.SpeechRecognition__microphone` переделать в отдельный компонент
 
 ## BookInfo
 

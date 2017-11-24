@@ -6,6 +6,7 @@ import { restoreSearchState } from '../../redux/reducers/search';
 import Header from './components/Header';
 import SearchResults from './components/SearchResults';
 import BooksList from './components/BooksList';
+import SpeechRecognition from './components/SpeechRecognition';
 
 import './style.css';
 
@@ -28,6 +29,7 @@ class Search extends Component {
           <SearchResults className="SearchPage__results" />
           <BooksList className="SearchPage__books-list" />
         </div>
+        <SpeechRecognition />
       </div>
     );
   }
