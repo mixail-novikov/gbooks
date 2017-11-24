@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { setSearchTerm, selectTerm, runSearch } from '../../../../../redux/reducers/search';
 
 import './style.css';
 import microfoneIconPath from './microfone.png';
@@ -6,6 +9,8 @@ import SearchIcon from './SearchIcon';
 
 class SearchForm extends Component {
   render() {
+    const { term } = this.props;
+
     return (
       <form
         className="SearchFormInner"
@@ -14,6 +19,8 @@ class SearchForm extends Component {
         <input
           type="text"
           className="SearchFormInner__input"
+          value={term}
+          onChange={this.handleTermChange}
         />
         <div className="SearchFormInner__buttons">
           <button
@@ -38,8 +45,24 @@ class SearchForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log('submit');
+    this.props.onSubmit();
   };
+
+  handleTermChange = (e) => {
+    this.props.onTermChange(e.target.value);
+  }
 }
 
-export default SearchForm;
+const mapStateToProps = (state) => ({
+  term: selectTerm(state),
+});
+
+const mapDispatchToProps = {
+  onTermChange: setSearchTerm,
+  onSubmit: runSearch,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchForm);
