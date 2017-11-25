@@ -1,4 +1,4 @@
-import { createAction, createReducer } from 'redux-act';
+import { createAction, createReducer, batch } from 'redux-act';
 import { combineReducers } from 'redux';
 import { get } from 'lodash';
 import { push } from 'react-router-redux';
@@ -11,6 +11,7 @@ Actions
 */
 export const setSearchTerm = createAction('set search term');
 export const runSearch = createAction('run search');
+export const setSearchTermAndRun = createAction('set search term and run search');
 const searchIsFinished = createAction('search is finished');
 export const restoreSearchState = createAction('restore search state', (searchQuery) => (new URLSearchParams(searchQuery)));
 
@@ -41,6 +42,7 @@ export const selectLoading = (state) => get(state, 'search.loading');
 export function* searchSaga() {
   yield fork(performSearchSaga);
   yield fork(syncRoute);
+  yield fork(setSearchTermAndRunSaga);
 }
 
 function* syncRoute() {
@@ -72,5 +74,13 @@ function* performSearchSaga() {
     } catch (e) {
       console.log(e);
     }
+  }
+}
+
+function* setSearchTermAndRunSaga() {
+  while (true) {
+    const { payload } = yield take(setSearchTermAndRun.getType());
+    yield put(setSearchTerm(payload))
+    yield put(runSearch());
   }
 }
