@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './style.css';
 import googleLogoPath from './google-logo.png';
-import MicrophoneIcon from './MicrophoneIcon';
+import MicrophoneButton from './MicrophoneButton';
 
 class SpeechRecognition extends Component {
   render() {
@@ -12,9 +12,10 @@ class SpeechRecognition extends Component {
           <span className="SpeechRecognition__content-item SpeechRecognition__text">
             Listening...
           </span>
-          <button className="SpeechRecognition__content-item SpeechRecognition__microphone SpeechRecognition__microphone_active">
-            <MicrophoneIcon className="SpeechRecognition__microphone-icon" />
-          </button>
+          <MicrophoneButton
+            className="SpeechRecognition__content-item SpeechRecognition__microphone"
+            onClick={this.handleMicrophoneClick}
+          />
           <img
             className="SpeechRecognition__content-item SpeechRecognition__google-logo"
             src={googleLogoPath}
@@ -24,6 +25,10 @@ class SpeechRecognition extends Component {
       </div>
     );
   }
+
+  handleMicrophoneClick = () => {
+    console.log('start recognition');
+  };
 }
 
 export default SpeechRecognition;
