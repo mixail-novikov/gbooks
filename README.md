@@ -7,6 +7,7 @@
 - [ ] Пагинация
 - [x] `.SpeechRecognition__microphone` переделать в отдельный компонент
 - [ ] Анимация MicrophoneButton во время распознавания
+- [ ] Анимация на смену текста Speak now -> Listening...
 
 ## BookInfo
 
