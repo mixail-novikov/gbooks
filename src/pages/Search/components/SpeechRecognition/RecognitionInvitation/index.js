@@ -5,12 +5,18 @@ class RecognitionInvitation extends Component {
     text: 'Speak now'
   };
 
+  _mounted = true;
+
   componentDidMount() {
     setTimeout(() => {
-      this.setState({
+      this._mounted && this.setState({
         text: 'Listening...',
       })
     }, 1500);
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
   }
 
   render() {

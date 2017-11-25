@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { setSearchTermAndRun } from '../../../../redux/reducers/search';
-
 import './style.css';
 import googleLogoPath from './google-logo.png';
 import MicrophoneButton from './MicrophoneButton';
@@ -18,14 +16,18 @@ class SpeechRecognition extends Component {
     speechInProgress: false,
     result: '',
     isFinish: false,
-  }
+  };
+  _mounted = true;
 
   static propTypes = {
     onRecognize: PropTypes.func,
+    onClose: PropTypes.func,
+    isVisible: PropTypes.bool,
   }
 
   static defaultProps = {
-    onRecognize: () => {console.log('onRecognize callback default handler')}
+    onRecognize: () => {console.log('onRecognize callback default handler')},
+    onClose: () => {console.log('onClose callback default handler');}
   }
 
   constructor() {
@@ -37,7 +39,13 @@ class SpeechRecognition extends Component {
     this.recognition.start();
   }
 
+  componentWillUnmount() {
+    this._mounted = false;
+    this.recognition.abort();
+  }
+
   render() {
+    const { onClose } = this.props;
     const { result, isFinish, noMatch } = this.state;
 
     return (
@@ -60,7 +68,7 @@ class SpeechRecognition extends Component {
             src={googleLogoPath}
           />
         </div>
-        <button className="SpeechRecognition__close">×</button>
+        <button className="SpeechRecognition__close" onClick={onClose}>×</button>
       </div>
     );
   }
@@ -76,13 +84,13 @@ class SpeechRecognition extends Component {
     this.recognition.maxAlternatives = 5;
 
     this.recognition.onspeechstart = () => {
-      this.setState({
+      this._mounted && this.setState({
         speechInProgress: true,
       })
     }
 
     this.recognition.onspeechend = () => {
-      this.setState({
+      this._mounted && this.setState({
         speechInProgress: false,
       })
     }
@@ -91,7 +99,7 @@ class SpeechRecognition extends Component {
       const result = event.results[0][0].transcript;
       const isFinish = event.results[0].isFinal;
 
-      this.setState({
+      this._mounted && this.setState({
         result,
         isFinish,
         noMatch: false,
@@ -103,7 +111,7 @@ class SpeechRecognition extends Component {
     };
 
     this.recognition.onend = () => {
-      if (!this.state.result) {
+      if (!this.state.result && this._mounted) {
         this.setState({
           noMatch: true,
         })
@@ -111,14 +119,14 @@ class SpeechRecognition extends Component {
     };
 
     this.recognition.onstart = () => {
-      this.setState({
+      this._mounted && this.setState({
         noMatch: false,
         result: '',
       })
     };
 
     this.recognition.onnomatch = () => {
-      this.setState({
+      this._mounted && this.setState({
         noMatch: true,
       })
     };
@@ -133,9 +141,4 @@ class SpeechRecognition extends Component {
   };
 }
 
-export default connect(
-  null,
-  {
-    onRecognize: setSearchTermAndRun
-  }
-)(SpeechRecognition);
+export default SpeechRecognition;

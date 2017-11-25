@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { setSearchTerm, selectTerm, runSearch } from '../../../../../redux/reducers/search';
+import { openSpeechPopup } from '../../../../../redux/reducers/speech';
+
 
 import './style.css';
 import microfoneIconPath from './microfone.png';
@@ -9,7 +11,7 @@ import SearchIcon from './SearchIcon';
 
 class SearchForm extends Component {
   render() {
-    const { term } = this.props;
+    const { term, onMicrophoneClick } = this.props;
 
     return (
       <form
@@ -26,6 +28,7 @@ class SearchForm extends Component {
           <button
             type="button"
             className="SearchFormInner__button SearchFormInner__button_speech"
+            onClick={onMicrophoneClick}
           >
             <img
               className="SearchFormInner__search-icon"
@@ -60,6 +63,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   onTermChange: setSearchTerm,
   onSubmit: runSearch,
+  onMicrophoneClick: openSpeechPopup,
 };
 
 export default connect(
