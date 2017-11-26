@@ -36,27 +36,23 @@ export default combineReducers({
 /*
 Selectors
 */
-export const selectTerm = (state) => get(state, 'search.term');
+export const selectTerm = (state) => get(state, 'search.term'); // state.searchQuery.get('q');
 export const selectLoading = (state) => get(state, 'search.loading');
 
 export function* searchSaga() {
-  yield fork(performSearchSaga);
-  yield fork(syncRoute);
-  yield fork(setSearchTermAndRunSaga);
+  // yield fork(performSearchSaga);
+  // yield fork(syncRoute);
+  // yield fork(setSearchTermAndRunSaga);
 }
 
 function* syncRoute() {
-  while (true) {
-    yield take(restoreSearchState.getType());
-    const term = yield select(selectTerm);
-
-    try {
-      const resp = yield call(axios, 'https://www.googleapis.com/books/v1/volumes', {params: {q: term}});
-      yield put(insertBooks(resp.data.items));
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  // while (true) {
+  //   yield take(setSearchTerm.getType());
+  //   yield put(push({
+  //     pathname: '/search',
+  //     search: `q=${encodeURIComponent(term)}`
+  //   }));
+  // }
 }
 
 function* performSearchSaga() {
@@ -67,10 +63,6 @@ function* performSearchSaga() {
     try {
       const resp = yield call(axios, 'https://www.googleapis.com/books/v1/volumes', {params: {q: term}});
       yield put(insertBooks(resp.data.items));
-      yield put(push({
-        pathname: '/search',
-        search: `q=${encodeURIComponent(term)}`
-      }));
     } catch (e) {
       console.log(e);
     }
