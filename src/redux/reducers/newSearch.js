@@ -107,7 +107,9 @@ function* updateRouterFromSearchState() {
 
 function* computeSearchString() {
   const { filter, orderBy, printType } = yield select(state => state.newSearch);
-  const newSearchParams = {};
+  const search = yield select(state => state.router.location.search);
+
+  const newSearchParams = qs.parse(search);
   if (filter !== filterDefaultValue) {
     newSearchParams['fltr'] = filter;
   }
