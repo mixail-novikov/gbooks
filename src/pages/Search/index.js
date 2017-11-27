@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { restoreSearchState } from '../../redux/reducers/search';
+import { startStoreSync, stopStoreSync } from '../../redux/reducers/newSearch';
 
 import Header from './components/Header';
 import SearchResults from './components/SearchResults';
@@ -14,14 +14,13 @@ import FilterComponent from '../../components/FilterComponent';
 import './style.css';
 
 class Search extends Component {
-  componentDidMount() {
-    // this.props.restoreSearchState();
+  constructor(props) {
+    super(props);
+    this.props.startStoreSync();
   }
 
-  componentDidUpdate({location}) {
-    if (this.props.location.search !== location.search) {
-      // this.props.restoreSearchState()
-    }
+  componentWillUnmount() {
+    this.props.stopStoreSync();
   }
 
   render() {
@@ -40,9 +39,10 @@ class Search extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch, { location }) => ({
-  // restoreSearchState: () => dispatch(restoreSearchState(location.search)),
-});
+const mapDispatchToProps = {
+  startStoreSync,
+  stopStoreSync,
+};
 
 export default connect(
   null,

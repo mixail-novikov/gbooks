@@ -1,9 +1,14 @@
-import { createAction, createReducer } from 'redux-act';
+import { createAction, createReducer, batch } from 'redux-act';
 import { combineReducers } from 'redux';
 import * as qs from 'query-string';
 
-import { take, put, select, fork } from 'redux-saga/effects';
+import { take, call, put, select, fork, spawn, cancel, cancelled } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
+
 import { push, LOCATION_CHANGE } from 'react-router-redux';
+
+export const startStoreSync = createAction('start store sync');
+export const stopStoreSync = createAction('start store sync');
 
 export const runSearch = createAction('run search');
 
@@ -74,7 +79,36 @@ export default combineReducers({
 });
 
 export function* newSearchSaga() {
-  yield fork(searchSaga);
+  yield spawn(searchSaga);
+  yield spawn(runSyncSaga);
+}
+
+function* syncSaga() {
+  try {
+    while (true) {
+      const { payload } = yield take(LOCATION_CHANGE);
+      const { search='' } = payload;
+      console.log(search);
+      const searchObj = qs.parse(search);
+      yield put(batch(
+        setSearchFilter.raw(searchObj.fltr),
+        setPrintType(searchObj.prt),
+        setSorting(searchObj.srt),
+      ));
+    }
+  } finally {
+    if (cancelled()) {
+      console.log('task cancelled');
+    }
+  }
+}
+
+function* runSyncSaga() {
+  while (yield take(startStoreSync.getType())) {
+    const syncId = yield fork(syncSaga);
+    yield take(stopStoreSync.getType());
+    yield cancel(syncId);
+  }
 }
 
 function* searchSaga() {
