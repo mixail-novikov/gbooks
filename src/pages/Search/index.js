@@ -8,7 +8,6 @@ import SearchResults from './components/SearchResults';
 import BooksList from './components/BooksList';
 import SpeechRecognitionPopup from './components/SpeechRecognitionPopup';
 
-import TestComponent from '../../components/TestComponent';
 import FilterComponent from '../../components/FilterComponent';
 
 import './style.css';
@@ -27,7 +26,6 @@ class Search extends Component {
     return (
       <div className="SearchPage">
         <Header />
-        <TestComponent />
         <FilterComponent />
         <div className="SearchPage__content">
           <SearchResults className="SearchPage__results" />
