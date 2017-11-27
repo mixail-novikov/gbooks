@@ -49,6 +49,7 @@
 .Dropdown__items {
   display: none;
   position: absolute;
+  z-index: 1;
   top: 100%;
   left: -15px;
   background: #fff;
