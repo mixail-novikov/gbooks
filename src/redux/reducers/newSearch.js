@@ -112,14 +112,20 @@ function* computeSearchString() {
   const newSearchParams = qs.parse(search);
   if (filter !== filterDefaultValue) {
     newSearchParams['fltr'] = filter;
+  } else {
+    delete newSearchParams['fltr'];
   }
 
   if (printType !== printTypeDefaultValue) {
     newSearchParams['prnt'] = printType;
+  } else {
+    delete newSearchParams['prnt'];
   }
 
   if (orderBy !== sortingDefaultValue) {
     newSearchParams['srt'] = orderBy;
+  } else {
+    delete newSearchParams['srt'];
   }
 
   return qs.stringify(newSearchParams);
