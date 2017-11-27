@@ -5,9 +5,9 @@ import c from 'classnames';
 import './style.css';
 
 export class Dropdown extends Component {
-  childrenMap = {};
   state = {
     isOpened: false,
+    childrenMap: {},
   }
 
   static propTypes = {
@@ -36,7 +36,12 @@ export class Dropdown extends Component {
   }
 
   registerChild = (key, value) => {
-    this.childrenMap[key] = value;
+    this.setState((state) => ({
+      childrenMap: {
+        ...state.childrenMap,
+        [key]: value
+      }
+    }));
   };
 
   handleOnSelect = (value) => {
@@ -55,7 +60,7 @@ export class Dropdown extends Component {
   }
 
   render() {
-    const { isOpened } = this.state;
+    const { isOpened, childrenMap } = this.state;
     const { value, valueText, defaultValue } = this.props;
 
     return (
@@ -66,7 +71,7 @@ export class Dropdown extends Component {
         <div className={c({
           "Dropdown__value": true,
           "Dropdown__value_is_default": value === defaultValue,
-        })} onClick={this.handleClick}>{this.childrenMap[value]}</div>
+        })} onClick={this.handleClick}>{childrenMap[value]}</div>
         <div className="Dropdown__items">{this.props.children}</div>
       </div>
     );
