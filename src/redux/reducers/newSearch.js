@@ -86,15 +86,23 @@ export function* newSearchSaga() {
   yield spawn(runSyncSaga);
 }
 
-function* restoreSearchState() {
+function* updateSearchStateFromRouter() {
   const search = yield select(state => get(state, 'router.location.search', ''));
-  console.log(search);
   const searchObj = qs.parse(search);
   yield put(batch(
     setSearchFilter.raw(searchObj.fltr),
     setPrintType.raw(searchObj.prnt),
     setSorting.raw(searchObj.srt),
   ));
+}
+
+function* updateRouterFromSearchState() {
+  const search = yield call(computeSearchString);
+  const { location } = yield select(store => store.router.location);
+  yield put(push({
+    ...location,
+    search,
+  }));
 }
 
 function* computeSearchString() {
@@ -117,7 +125,7 @@ function* computeSearchString() {
 
 function* syncSaga() {
   try {
-    yield takeLatest(LOCATION_CHANGE, restoreSearchState);
+    yield takeLatest(LOCATION_CHANGE, updateSearchStateFromRouter);
   } finally {
     if (cancelled()) {
       console.log('task cancelled');
@@ -127,7 +135,7 @@ function* syncSaga() {
 
 function* runSyncSaga() {
   while (yield take(startStoreSync.getType())) {
-    yield call(restoreSearchState);
+    yield call(updateSearchStateFromRouter);
     const syncId = yield fork(syncSaga);
     yield take(stopStoreSync.getType());
     yield cancel(syncId);
@@ -137,11 +145,6 @@ function* runSyncSaga() {
 function* searchSaga() {
   while (true) {
     yield take([runSearch.getType(), oldRunSearch.getType()]);
-    const search = yield call(computeSearchString);
-    const { location } = yield select(store => store.router.location);
-    yield put(push({
-      ...location,
-      search,
-    }))
+    yield call(updateRouterFromSearchState);
   }
 }
