@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { setSearchTermAndRun } from '../../../../redux/reducers/search';
+import { setSearchTerm, runSearch } from '../../../../redux/reducers/newSearch';
 import { selectSpeechPopup, closeSpeechPopup } from '../../../../redux/reducers/speech';
 import SpeechRecognition from '../SpeechRecognition';
 
@@ -21,8 +21,12 @@ export default connect(
   (state) => ({
     isVisible: selectSpeechPopup(state),
   }),
-  {
-    onRecognize: setSearchTermAndRun,
-    onClose: closeSpeechPopup,
-  }
+  (dispatch) => ({
+    onRecognize: (term) => {
+      dispatch(setSearchTerm(term));
+      dispatch(runSearch());
+      dispatch(closeSpeechPopup());
+    },
+    onClose: () => dispatch(closeSpeechPopup()),
+  })
 )(SpeechRecognitionPopup);

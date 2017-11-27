@@ -3,7 +3,7 @@ import { string, func } from 'prop-types';
 import c from 'classnames';
 import { connect } from 'react-redux';
 
-import { setSearchTerm, selectTerm, runSearch } from '../../../../redux/reducers/search';
+import { setSearchTerm, selectTerm, runSearch } from '../../../../redux/reducers/newSearch';
 
 import searchIcon from './search.png';
 import './style.css';

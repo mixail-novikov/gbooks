@@ -6,14 +6,22 @@ import { get } from 'lodash';
 import { take, takeLatest, call, put, select, fork, spawn, cancel, cancelled } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 
+import axios from 'axios';
+import { insertBooks } from './books';
+
 import { push, LOCATION_CHANGE } from 'react-router-redux';
-import { runSearch as oldRunSearch } from './search';
 
 export const startStoreSync = createAction('start store sync');
 export const stopStoreSync = createAction('start store sync');
 
-
 export const runSearch = createAction('run search');
+
+/** TERM **/
+export const setSearchTerm = createAction('set search term', (term) => term || '');
+const termReducer = createReducer({
+  [setSearchTerm]: (state, data) => data,
+}, '');
+export const selectTerm = (state) => state.newSearch.term;
 
 /** FILTER **/
 export const filterDefaultValue = "all";
@@ -79,6 +87,7 @@ export default combineReducers({
   filter: filterReducer,
   printType: printTypeReducer,
   orderBy: sortingReducer,
+  term: termReducer,
 });
 
 export function* newSearchSaga() {
@@ -93,6 +102,7 @@ function* updateSearchStateFromRouter() {
     setSearchFilter.raw(searchObj.fltr),
     setPrintType.raw(searchObj.prnt),
     setSorting.raw(searchObj.srt),
+    setSearchTerm.raw(searchObj.trm),
   ));
 }
 
@@ -106,7 +116,7 @@ function* updateRouterFromSearchState() {
 }
 
 function* computeSearchString() {
-  const { filter, orderBy, printType } = yield select(state => state.newSearch);
+  const { filter, orderBy, printType, term } = yield select(state => state.newSearch);
   const search = yield select(state => state.router.location.search);
 
   const newSearchParams = qs.parse(search);
@@ -128,7 +138,39 @@ function* computeSearchString() {
     delete newSearchParams['srt'];
   }
 
+  if (term) {
+    newSearchParams['trm'] = term;
+  } else {
+    delete newSearchParams['trm'];
+  }
+
   return qs.stringify(newSearchParams);
+}
+
+function* computeGoogleSearchParams() {
+  const { term, filter, orderBy, printType } = yield select(store => store.newSearch);
+
+  if (!term) {
+    throw Error('Term is required');
+  }
+
+  const params = {
+    q: term,
+  };
+
+  if (filter !== filterDefaultValue) {
+    params['filter'] = filter;
+  }
+
+  if (orderBy !== sortingDefaultValue) {
+    params['orderBy'] = orderBy;
+  }
+
+  if (printType !== printTypeDefaultValue) {
+    params['printType'] = printType
+  }
+
+  return params;
 }
 
 function* syncSaga() {
@@ -151,8 +193,14 @@ function* runSyncSaga() {
 }
 
 function* searchSaga() {
-  while (true) {
-    yield take([runSearch.getType(), oldRunSearch.getType()]);
+  while (yield take(runSearch.getType())) {
     yield call(updateRouterFromSearchState);
+    try {
+      const params = yield call(computeGoogleSearchParams)
+      const resp = yield call(axios, 'https://www.googleapis.com/books/v1/volumes', {params});
+      yield put(insertBooks(resp.data.items));
+    } catch (e) {
+      console.log(e);
+    }
   }
 }

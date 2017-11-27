@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { setSearchTerm, selectTerm, runSearch } from '../../../../../redux/reducers/search';
+import { setSearchTerm, selectTerm, runSearch } from '../../../../../redux/reducers/newSearch';
 import { openSpeechPopup } from '../../../../../redux/reducers/speech';
 
 
