@@ -3,7 +3,7 @@ import { string, func } from 'prop-types';
 import c from 'classnames';
 import { connect } from 'react-redux';
 
-import { term, runSearch } from '../../../../redux/reducers/search';
+import { term, goToSearchPage } from '../../../../redux/reducers/search';
 
 import searchIcon from './search.png';
 import './style.css';
@@ -52,7 +52,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   onTermChange: term.set,
-  onSubmit: runSearch,
+  onSubmit: goToSearchPage,
 };
 
 export default connect(

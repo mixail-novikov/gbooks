@@ -18,7 +18,7 @@ class BooksList extends Component {
     const { books, className } = this.props;
     return (
       <div className={c('BooksList', className)}>
-        {books.map(book => <Book className="BooksList__item" key={book.id} {...book} />)}
+        {books.map((book, id) => <Book className="BooksList__item" key={id} {...book} />)}
       </div>
     );
   }

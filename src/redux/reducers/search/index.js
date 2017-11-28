@@ -30,9 +30,12 @@ export default combineReducers({
   term: termStuff.reducer,
 });
 
+export const goToSearchPage = createAction('go to search page');
+
 export function* newSearchSaga() {
   yield spawn(searchSaga);
   yield spawn(runSyncSaga);
+  yield takeLatest(goToSearchPage.getType(), goToSearchPageSaga);
 }
 
 function* updateSearchStateFromRouter() {
@@ -44,6 +47,7 @@ function* updateSearchStateFromRouter() {
     sortingStuff.set.raw(searchObj.srt),
     termStuff.set.raw(searchObj.trm),
   ));
+  yield call(performSearch);
 }
 
 function* updateRouterFromSearchState() {
@@ -62,6 +66,13 @@ function* selectSearchState() {
     printType: printTypeStuff.select(state),
     term: termStuff.select(state),
   }));
+}
+
+function* goToSearchPageSaga() {
+  yield put(push({
+    pathname: '/search',
+    search: yield call(computeSearchString),
+  }))
 }
 
 function* computeSearchString() {
@@ -144,12 +155,22 @@ function* runSyncSaga() {
 function* searchSaga() {
   while (yield take(runSearch.getType())) {
     yield call(updateRouterFromSearchState);
-    try {
-      const params = yield call(computeGoogleSearchParams)
-      const resp = yield call(axios, 'https://www.googleapis.com/books/v1/volumes', {params});
-      yield put(insertBooks(resp.data.items));
-    } catch (e) {
-      console.log(e);
+  }
+}
+
+function* performSearch() {
+  let lastParamsStr;
+  try {
+    const params = yield call(computeGoogleSearchParams);
+    // TODO: подумать о другом способе
+    const paramsStr = JSON.stringify(params);
+    if (paramsStr === lastParamsStr) {
+      return;
     }
+    const resp = yield call(axios, 'https://www.googleapis.com/books/v1/volumes', {params});
+    yield put(insertBooks(resp.data.items));
+    lastParamsStr = paramsStr;
+  } catch (e) {
+    console.log(e);
   }
 }
