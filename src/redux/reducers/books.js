@@ -2,6 +2,8 @@ import { createAction, createReducer } from 'redux-act';
 import sanitizeHtml from 'sanitize-html';
 import { get } from 'lodash';
 
+import { resultsLoaded } from './search';
+
 const getTitleFromBook = (book) => {
   const { title, subtitle } = get(book, 'volumeInfo', {});
 
@@ -83,6 +85,7 @@ export const insertBooks = createAction('insert books', (books) => books.map(tra
 
 export default createReducer({
   [insertBooks]: (state, books) => books,
+  [resultsLoaded]: (state, {items}) => items.map(transformBook),
 }, []);
 
 export const selectBooks = (state) => state.books;

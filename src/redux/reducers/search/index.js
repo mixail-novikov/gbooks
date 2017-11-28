@@ -3,7 +3,6 @@ import * as termStuff from './term';
 import * as printTypeStuff from './printType';
 import * as sortingStuff from './sorting';
 
-
 import { createAction, createReducer, batch } from 'redux-act';
 import { combineReducers } from 'redux';
 import * as qs from 'query-string';
@@ -12,7 +11,6 @@ import { get } from 'lodash';
 import { take, takeLatest, call, put, select, fork, spawn, cancel, cancelled } from 'redux-saga/effects';
 
 import axios from 'axios';
-import { insertBooks } from '../books';
 
 import { push, LOCATION_CHANGE } from 'react-router-redux';
 
@@ -23,11 +21,63 @@ export const stopStoreSync = createAction('start store sync');
 
 export const runSearch = createAction('run search');
 
+export const resultsLoaded = createAction('results loaded');
+
+const setResponseTime = createAction('set response time');
+const responseTimeReducer = createReducer({
+  [resultsLoaded]: (state, {responseTime=0}) => responseTime,
+}, 0);
+export const selectResponseTime = (state) => state.newSearch.results.responseTime;
+
+const setResultsCount = createAction('set results count');
+const resultsCountReducer = createReducer({
+  [resultsLoaded]: (state, {count=0}) => count,
+}, 0);
+export const selectResultsCount = (state) => state.newSearch.results.resultsCount;
+
+const setNoResults = createAction('set no results');
+
+const noResultsStatusReducer = createReducer({
+  [resultsLoaded]: (state, {count=0}) => count === 0,
+  [setNoResults]: (state) => true,
+}, false);
+
+export const selectNoResultsStatus = (state) => state.newSearch.results.noResults.status;
+
+const noResultsTermReducer = createReducer({
+  [setNoResults]: (state, term) => term,
+}, '');
+
+export const selectNoResultsTerm = (state) => state.newSearch.results.noResults.term;
+
+const noResultsReducer = combineReducers({
+  status: noResultsStatusReducer,
+  term: noResultsTermReducer,
+})
+
+const resultsReducer = combineReducers({
+  responseTime: responseTimeReducer,
+  resultsCount: resultsCountReducer,
+  noResults: noResultsReducer,
+});
+
+const startLoading = createAction('start loading');
+const finishLoading = createAction('finish loading');
+
+const loadingReducer = createReducer({
+  [startLoading]: () => true,
+  [finishLoading]: () => false,
+}, false);
+
+export const selectLoadingStatus = (state) => state.newSearch.loading;
+
 export default combineReducers({
   filter: filterStuff.reducer,
   printType: printTypeStuff.reducer,
   orderBy: sortingStuff.reducer,
   term: termStuff.reducer,
+  results: resultsReducer,
+  loading: loadingReducer,
 });
 
 export const goToSearchPage = createAction('go to search page');
@@ -148,6 +198,7 @@ function* runSyncSaga() {
     yield call(updateSearchStateFromRouter);
     const syncId = yield fork(syncSaga);
     yield take(stopStoreSync.getType());
+    console.log('cancel');
     yield cancel(syncId);
   }
 }
@@ -158,19 +209,39 @@ function* searchSaga() {
   }
 }
 
+let lastParamsStr;
 function* performSearch() {
-  let lastParamsStr;
+  const term = yield select(termStuff.select);
+  const params = yield call(computeGoogleSearchParams);
+  // TODO: подумать о другом способе
+  const paramsStr = JSON.stringify(params);
+  if (paramsStr === lastParamsStr) {
+    return;
+  }
+  let startTime = Date.now();
+  yield put(startLoading());
+
+  let resp;
   try {
-    const params = yield call(computeGoogleSearchParams);
-    // TODO: подумать о другом способе
-    const paramsStr = JSON.stringify(params);
-    if (paramsStr === lastParamsStr) {
-      return;
-    }
-    const resp = yield call(axios, 'https://www.googleapis.com/books/v1/volumes', {params});
-    yield put(insertBooks(resp.data.items));
-    lastParamsStr = paramsStr;
+    resp = yield call(axios, 'https://www.googleapis.com/books/v1/volumes', {params});
   } catch (e) {
-    console.log(e);
+    yield put(setNoResults(term));
+    return;
+  } finally {
+    yield put(finishLoading());
+    lastParamsStr = paramsStr;
+  }
+
+  const items = get(resp, 'data.items', []);
+
+  if (items.length) {
+    // TODO на один экшен навесть несколько редьюсеров
+    yield put(resultsLoaded({
+      items,
+      count: get(resp, 'data.totalItems'),
+      responseTime: Date.now() - startTime,
+    }));
+  } else {
+    yield put(setNoResults(term));
   }
 }
