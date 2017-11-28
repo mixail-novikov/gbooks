@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import {
-  setSearchFilter, filterMap, filterDefaultValue,
-  setPrintType, printTypeMap, printTypeDefaultValue,
-  setSorting, sortingMap, sortingDefaultValue,
-} from '../../../redux/reducers/newSearch';
+  filter,
+  printType,
+  sorting,
+} from '../../../redux/reducers/search';
 import { Dropdown, DropdownItem } from '../../Dropdown';
 
 class FilterDropdown extends Component {
@@ -18,20 +18,20 @@ class FilterDropdown extends Component {
 
     return (
       <div>
-        <Dropdown value={filterValue} defaultValue={filterDefaultValue} onChange={onChangeFilter}>
-          {filterMap.map(item => (
+        <Dropdown value={filterValue} defaultValue={filter.defaultValue} onChange={onChangeFilter}>
+          {filter.items.map(item => (
             <DropdownItem key={item.key} value={item.key}>{item.value}</DropdownItem>
           ))}
         </Dropdown>
 
-        <Dropdown value={printTypeValue} defaultValue={printTypeDefaultValue} onChange={onChangePrintType}>
-          {printTypeMap.map(item => (
+        <Dropdown value={printTypeValue} defaultValue={printType.defaultValue} onChange={onChangePrintType}>
+          {printType.items.map(item => (
             <DropdownItem key={item.key} value={item.key}>{item.value}</DropdownItem>
           ))}
         </Dropdown>
 
-        <Dropdown value={sortingValue} defaultValue={sortingDefaultValue} onChange={onChangeSorting}>
-          {sortingMap.map(item => (
+        <Dropdown value={sortingValue} defaultValue={sorting.defaultValue} onChange={onChangeSorting}>
+          {sorting.items.map(item => (
             <DropdownItem key={item.key} value={item.key}>{item.value}</DropdownItem>
           ))}
         </Dropdown>
@@ -42,16 +42,16 @@ class FilterDropdown extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    filterValue: state.newSearch.filter,
-    printTypeValue: state.newSearch.printType,
-    sortingValue: state.newSearch.orderBy,
+    filterValue: filter.select(state),
+    printTypeValue: printType.select(state),
+    sortingValue: sorting.select(state),
   }
 };
 
 const mapDispatchToProps = {
-  onChangeFilter: setSearchFilter,
-  onChangePrintType: setPrintType,
-  onChangeSorting: setSorting,
+  onChangeFilter: filter.set,
+  onChangePrintType: printType.set,
+  onChangeSorting: sorting.set,
 }
 
 export default connect(

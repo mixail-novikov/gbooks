@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 
 import booksReducer from './books';
 import speechReducer from './speech';
-import newSearchReducer from './newSearch';
+import newSearchReducer from './search';
 
 export default combineReducers({
   books: booksReducer,

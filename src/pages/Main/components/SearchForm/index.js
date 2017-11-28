@@ -3,7 +3,7 @@ import { string, func } from 'prop-types';
 import c from 'classnames';
 import { connect } from 'react-redux';
 
-import { setSearchTerm, selectTerm, runSearch } from '../../../../redux/reducers/newSearch';
+import { term, runSearch } from '../../../../redux/reducers/search';
 
 import searchIcon from './search.png';
 import './style.css';
@@ -47,11 +47,11 @@ class SearchForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  term: selectTerm(state),
+  term: term.select(state),
 });
 
 const mapDispatchToProps = {
-  onTermChange: setSearchTerm,
+  onTermChange: term.set,
   onSubmit: runSearch,
 };
 
