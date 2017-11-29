@@ -89,3 +89,8 @@ export default createReducer({
 }, []);
 
 export const selectBooks = (state) => state.books;
+
+export const hasBooks = (state) => {
+  const books = selectBooks(state);
+  return books.length > 0;
+}

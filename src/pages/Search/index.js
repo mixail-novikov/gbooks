@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { startStoreSync, stopStoreSync } from '../../redux/reducers/newSearch';
+import { startStoreSync, stopStoreSync, runSearch } from '../../redux/reducers/newSearch';
 import { selectNoResultsStatus, selectLoadingStatus } from '../../redux/reducers/search';
+import { hasBooks } from '../../redux/reducers/books';
 
 import Header from './components/Header';
 import SearchResults from './components/SearchResults';
@@ -11,30 +12,21 @@ import SpeechRecognitionPopup from './components/SpeechRecognitionPopup';
 import NoResults from './components/NoResults';
 import FilterComponent from '../../components/FilterComponent';
 
+import spinnerPath from './spinner.svg';
 
 import './style.css';
 
 class Search extends Component {
-  constructor(props) {
-    super(props);
-    this.props.startStoreSync();
-  }
-
-  componentWillUnmount() {
-    this.props.stopStoreSync();
-  }
-
   render() {
-    const { noResults, isLoading } = this.props;
-    const hasResults = !noResults;
+    const { noResults, hasBooks, isLoading } = this.props;
 
     return (
       <div className="SearchPage">
-        {isLoading && <div>L...</div>}
+        {isLoading && <div className="SearchPage__preloader"><img src={spinnerPath} /></div>}
         <Header />
         <FilterComponent />
         <div className="SearchPage__content">
-          {hasResults && (
+          {hasBooks && (
             <div>
               <SearchResults className="SearchPage__results" />
               <BooksList className="SearchPage__books-list" />
@@ -50,12 +42,14 @@ class Search extends Component {
 
 const mapStateToProps = (state) => ({
   noResults: selectNoResultsStatus(state),
+  hasBooks: hasBooks(state),
   isLoading: selectLoadingStatus(state),
 })
 
 const mapDispatchToProps = {
   startStoreSync,
   stopStoreSync,
+  runSearch,
 };
 
 export default connect(

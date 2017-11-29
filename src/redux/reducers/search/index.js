@@ -8,11 +8,12 @@ import { combineReducers } from 'redux';
 import * as qs from 'query-string';
 import { get } from 'lodash';
 
-import { take, takeLatest, call, put, select, fork, spawn, cancel, cancelled } from 'redux-saga/effects';
+import { takeLatest, call, put, select } from 'redux-saga/effects';
 
 import axios from 'axios';
 
 import { push, LOCATION_CHANGE } from 'react-router-redux';
+import { matchPath } from 'react-router';
 
 export { filterStuff as filter, termStuff as term, printTypeStuff as printType, sortingStuff as sorting };
 
@@ -23,13 +24,11 @@ export const runSearch = createAction('run search');
 
 export const resultsLoaded = createAction('results loaded');
 
-const setResponseTime = createAction('set response time');
 const responseTimeReducer = createReducer({
   [resultsLoaded]: (state, {responseTime=0}) => responseTime,
 }, 0);
 export const selectResponseTime = (state) => state.newSearch.results.responseTime;
 
-const setResultsCount = createAction('set results count');
 const resultsCountReducer = createReducer({
   [resultsLoaded]: (state, {count=0}) => count,
 }, 0);
@@ -83,12 +82,27 @@ export default combineReducers({
 export const goToSearchPage = createAction('go to search page');
 
 export function* newSearchSaga() {
-  yield spawn(searchSaga);
-  yield spawn(runSyncSaga);
+  yield takeLatest(LOCATION_CHANGE, updateSearchStateFromRouter);
+  yield takeLatest(LOCATION_CHANGE, performSearch);
+  yield takeLatest(runSearch.getType(), updateRouterFromSearchState);
   yield takeLatest(goToSearchPage.getType(), goToSearchPageSaga);
 }
 
-function* updateSearchStateFromRouter() {
+export function* isSearchPage() {
+  try {
+    const pathname = yield select(state => state.router.location.pathname);
+    const { isExact } = matchPath(pathname, {path: '/search'});
+    return isExact;
+  } catch (e) {
+    return false;
+  }
+}
+
+function* updateSearchStateFromRouter({payload}) {
+  if (!(yield call(isSearchPage))) {
+    return;
+  }
+
   const search = yield select(state => get(state, 'router.location.search', ''));
   const searchObj = qs.parse(search);
   yield put(batch(
@@ -97,7 +111,6 @@ function* updateSearchStateFromRouter() {
     sortingStuff.set.raw(searchObj.srt),
     termStuff.set.raw(searchObj.trm),
   ));
-  yield call(performSearch);
 }
 
 function* updateRouterFromSearchState() {
@@ -183,35 +196,14 @@ function* computeGoogleSearchParams() {
   return params;
 }
 
-function* syncSaga() {
-  try {
-    yield takeLatest(LOCATION_CHANGE, updateSearchStateFromRouter);
-  } finally {
-    if (cancelled()) {
-      console.log('task cancelled');
-    }
-  }
-}
-
-function* runSyncSaga() {
-  while (yield take(startStoreSync.getType())) {
-    yield call(updateSearchStateFromRouter);
-    const syncId = yield fork(syncSaga);
-    yield take(stopStoreSync.getType());
-    console.log('cancel');
-    yield cancel(syncId);
-  }
-}
-
-function* searchSaga() {
-  while (yield take(runSearch.getType())) {
-    yield call(updateRouterFromSearchState);
-  }
-}
-
 let lastParamsStr;
 function* performSearch() {
+  if (!(yield call(isSearchPage))) {
+    return;
+  }
+
   const term = yield select(termStuff.select);
+  console.log('term', term);
   const params = yield call(computeGoogleSearchParams);
   // TODO: подумать о другом способе
   const paramsStr = JSON.stringify(params);
