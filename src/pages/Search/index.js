@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import { startStoreSync, stopStoreSync, runSearch } from '../../redux/reducers/newSearch';
-import { selectNoResultsStatus, selectLoadingStatus } from '../../redux/reducers/search';
+import { selectNoResultsStatus, selectLoadingStatus, isFilterPanelVisible, runSearch } from '../../redux/reducers/search';
 import { hasBooks } from '../../redux/reducers/books';
 
 import Header from './components/Header';
@@ -10,7 +10,7 @@ import SearchResults from './components/SearchResults';
 import BooksList from './components/BooksList';
 import SpeechRecognitionPopup from './components/SpeechRecognitionPopup';
 import NoResults from './components/NoResults';
-import FilterComponent from '../../components/FilterComponent';
+import FilterToolbar from '../../components/FilterToolbar';
 
 import spinnerPath from './spinner.svg';
 
@@ -18,17 +18,35 @@ import './style.css';
 
 class Search extends Component {
   render() {
-    const { noResults, hasBooks, isLoading } = this.props;
+    const { noResults, hasBooks, isLoading, isFilterPanelVisible } = this.props;
 
     return (
       <div className="SearchPage">
         {isLoading && <div className="SearchPage__preloader"><img src={spinnerPath} /></div>}
         <Header />
-        <FilterComponent />
         <div className="SearchPage__content">
           {hasBooks && (
             <div>
-              <SearchResults className="SearchPage__results" />
+              <div className="SearchPage__stuff">
+                <ReactCSSTransitionGroup
+                  transitionName="SearchPage__results-count"
+                  transitionEnter={true}
+                  transitionEnterTimeout={220}
+                  transitionLeave={true}
+                  transitionLeaveTimeout={220}>
+                  {!isFilterPanelVisible && <SearchResults className="SearchPage__results-count" />}
+                </ReactCSSTransitionGroup>
+                <div className="SearchPage__filter-panel-wrapper">
+                  <ReactCSSTransitionGroup
+                    transitionName="SearchPage__filter-panel"
+                    transitionEnter={true}
+                    transitionEnterTimeout={220}
+                    transitionLeave={true}
+                    transitionLeaveTimeout={220}>
+                    {isFilterPanelVisible && <FilterToolbar className="SearchPage__filter-panel" />}
+                  </ReactCSSTransitionGroup>
+                </div>
+              </div>
               <BooksList className="SearchPage__books-list" />
             </div>
           )}
@@ -44,12 +62,11 @@ const mapStateToProps = (state) => ({
   noResults: selectNoResultsStatus(state),
   hasBooks: hasBooks(state),
   isLoading: selectLoadingStatus(state),
+  isFilterPanelVisible: isFilterPanelVisible(state),
 })
 
 const mapDispatchToProps = {
-  startStoreSync,
-  stopStoreSync,
-  runSearch,
+  runSearch
 };
 
 export default connect(

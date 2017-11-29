@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import SearchForm from './SearchForm';
+import { connect } from 'react-redux';
 
+import SearchForm from './SearchForm';
 import LogoImage from '../../../../components/Logo';
 import './style.css';
 
+import { setFilterPanelVisibility, isFilterPanelVisible } from '../../../../redux/reducers/search';
+
 class Header extends Component {
   render() {
+    const { isFilterPanelVisible } = this.props;
     return (
       <div className="SearchHeader">
         <div className="SearchHeader__logo-holder">
@@ -13,10 +17,28 @@ class Header extends Component {
         </div>
         <div className="SearchHeader__content-holder">
           <SearchForm />
+          <button onClick={this.handleToolsClick}>toggle</button>
         </div>
       </div>
     );
   }
+
+  handleToolsClick = () => {
+    const { setFilterPanelVisibility, isFilterPanelVisible } = this.props;
+
+    setFilterPanelVisibility(!isFilterPanelVisible);
+  };
 }
 
-export default Header;
+const mapStateToProps = (state) => ({
+  isFilterPanelVisible: isFilterPanelVisible(state),
+});
+
+const mapDispatchToProps = {
+  setFilterPanelVisibility,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);

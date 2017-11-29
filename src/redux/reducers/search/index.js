@@ -70,6 +70,22 @@ const loadingReducer = createReducer({
 
 export const selectLoadingStatus = (state) => state.newSearch.loading;
 
+export const setFilterPanelVisibility = createAction('set filter panel visibility');
+
+const filterPanelVisibleReducer = createReducer({
+  [setFilterPanelVisibility]: (state, value) => value,
+}, false);
+
+const filterPanelTouchedRedcuer = createReducer({
+  [setFilterPanelVisibility]: () => true,
+  [resultsLoaded]: () => false,
+}, false);
+
+const filterPanelReducer = combineReducers({
+  visible: filterPanelVisibleReducer,
+  touched: filterPanelTouchedRedcuer,
+});
+
 export default combineReducers({
   filter: filterStuff.reducer,
   printType: printTypeStuff.reducer,
@@ -77,14 +93,30 @@ export default combineReducers({
   term: termStuff.reducer,
   results: resultsReducer,
   loading: loadingReducer,
+  filterPanel: filterPanelReducer,
 });
+
+export const isFilterPanelVisible = (state) => state.newSearch.filterPanel.touched ? state.newSearch.filterPanel.visible : isFilterPanelVisibleInnerSelector(state);
+
+export const isFilterPanelVisibleInnerSelector = (state) => {
+  const isPrintTypeSelected = printTypeStuff.select(state) !== printTypeStuff.defaultValue;
+  const isFilterSelected = filterStuff.select(state) !== filterStuff.defaultValue;
+  const isSortingSelected = sortingStuff.select(state) !== sortingStuff.defaultValue;
+
+  return isPrintTypeSelected || isFilterSelected || isSortingSelected;
+}
 
 export const goToSearchPage = createAction('go to search page');
 
 export function* newSearchSaga() {
   yield takeLatest(LOCATION_CHANGE, updateSearchStateFromRouter);
   yield takeLatest(LOCATION_CHANGE, performSearch);
-  yield takeLatest(runSearch.getType(), updateRouterFromSearchState);
+  yield takeLatest([
+    runSearch.getType(),
+    filterStuff.set.getType(),
+    sortingStuff.set.getType(),
+    printTypeStuff.set.getType(),
+  ], updateRouterFromSearchState);
   yield takeLatest(goToSearchPage.getType(), goToSearchPageSaga);
 }
 

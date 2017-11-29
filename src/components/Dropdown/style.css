@@ -1,11 +1,12 @@
 .Dropdown {
+  display: inline-block;
   font-size: 13px;
   color: #777;
   position: relative;
   padding-top: 0;
   padding-bottom: 0;
-  padding-right: 22px;
-  padding-left: 16px;
+  padding-right: 16px;
+  padding-left: 15px;
   line-height: 22px;
   cursor: pointer;
 }
@@ -67,10 +68,11 @@
 }
 
 .DropdownItem {
-  text-decoration: none;
   padding: 6px 44px 6px 30px;
-  line-height: 17px;
   display: block;
+  text-decoration: none;
+  line-height: 17px;
+  white-space: nowrap;
 }
 
 .DropdownItem:hover {
