@@ -237,3 +237,5 @@ function* performSearch() {
     yield put(setNoResults(term));
   }
 }
+
+export const getSearchLinkByAuthor = (author) => `/search?trm=inauthor:"${encodeURIComponent(author)}"`;

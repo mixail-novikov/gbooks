@@ -3,6 +3,9 @@ import { array, string } from 'prop-types';
 import './style.css';
 import { Link } from 'react-router-dom';
 
+import { connect } from 'react-redux';
+import { getSearchLinkByAuthor } from '../../../../../../redux/reducers/search';
+
 class BookInfo extends Component {
   static propTypes = {
     authors: array,
@@ -33,16 +36,11 @@ class BookInfo extends Component {
 
     return authors.map((author, id) => (
       <span key={id}>
-        <Link to={`/search?q=inauthor:${encodeURIComponent(author)}`} onClick={this.handleAuthorClick(author)}>{author}</Link>
+        <Link to={getSearchLinkByAuthor(author)}>{author}</Link>
         {' '}
       </span>
     ));
   }
-
-  handleAuthorClick = (author) => (e) => {
-    e.preventDefault();
-    console.log('search author ' + author);
-  };
 }
 
 export default BookInfo;
