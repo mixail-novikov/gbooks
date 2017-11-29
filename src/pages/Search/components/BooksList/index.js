@@ -5,7 +5,7 @@ import c from 'classnames';
 
 import './style.css';
 
-import Book from '../Book';
+import Book from './Book';
 import { selectBooks } from '../../../../redux/reducers/books';
 
 class BooksList extends Component {
