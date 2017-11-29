@@ -53,10 +53,43 @@ export class Dropdown extends Component {
     this.toggle();
   }
 
+  componentWillUnmount() {
+    this.removeOutsideClickListener();
+  }
+
   toggle() {
-    this.setState((state) => ({
-      isOpened: !state.isOpened,
-    }));
+    this.setState((state) => {
+      const isOpened = !state.isOpened
+
+      if (isOpened) {
+        this.addOutsideClickListener();
+      } else {
+        this.removeOutsideClickListener();
+      }
+
+      return {
+        isOpened
+      }
+    });
+  }
+
+  setRef = (ref) => { this.elemRef = ref; }
+
+  handleOutsideClick = (e) => {
+    const isClickInside = this.elemRef.contains(e.target);
+    if (!isClickInside) {
+      this.setState({
+        isOpened: false,
+      })
+    }
+  }
+
+  addOutsideClickListener() {
+    window.addEventListener('click', this.handleOutsideClick);
+  }
+
+  removeOutsideClickListener() {
+    window.removeEventListener('click', this.handleOutsideClick);
   }
 
   render() {
@@ -64,10 +97,13 @@ export class Dropdown extends Component {
     const { value, valueText, defaultValue } = this.props;
 
     return (
-      <div className={c({
-        "Dropdown": true,
-        "Dropdown_is_opened": isOpened,
-      })}>
+      <div
+        className={c({
+          "Dropdown": true,
+          "Dropdown_is_opened": isOpened,
+        })}
+        ref={this.setRef} 
+      >
         <div className={c({
           "Dropdown__value": true,
           "Dropdown__value_is_default": value === defaultValue,

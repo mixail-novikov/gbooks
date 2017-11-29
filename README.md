@@ -8,7 +8,7 @@
 - [x] `.SpeechRecognition__microphone` переделать в отдельный компонент
 - [ ] Анимация MicrophoneButton во время распознавания
 - [ ] Анимация на смену текста Speak now -> Listening...
-- [ ] Закрытие Drodown при клике из вне
+- [x] Закрытие Drodown при клике из вне
 
 ## BookInfo
 
