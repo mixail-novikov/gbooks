@@ -34,7 +34,7 @@ const resultsCountReducer = createReducer({
 }, 0);
 export const selectResultsCount = (state) => state.newSearch.results.resultsCount;
 
-const setNoResults = createAction('set no results');
+export const setNoResults = createAction('set no results');
 
 const noResultsStatusReducer = createReducer({
   [resultsLoaded]: (state, {count=0}) => count === 0,
