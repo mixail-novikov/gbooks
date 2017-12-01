@@ -8,55 +8,37 @@ import {
   sorting,
 } from '../../redux/reducers/search';
 import { Dropdown, DropdownItem } from '../Dropdown';
+import FilterDropdown from './FilterDropdown';
 
 class FilterToolbar extends Component {
   render() {
-    const {
-      filterValue, onChangeFilter,
-      printTypeValue, onChangePrintType,
-      sortingValue, onChangeSorting,
-      className,
-    } = this.props;
+    const { className } = this.props;
 
     return (
       <div className={c('FilterToolbar', className)}>
-        <Dropdown value={filterValue} defaultValue={filter.defaultValue} onChange={onChangeFilter}>
-          {filter.items.map(item => (
-            <DropdownItem key={item.key} value={item.key}>{item.value}</DropdownItem>
-          ))}
-        </Dropdown>
+        <FilterDropdown
+          selector={filter.select}
+          onChange={filter.set}
+          defaultValue={filter.defaultValue}
+          items={filter.items}
+        />
 
-        <Dropdown value={printTypeValue} defaultValue={printType.defaultValue} onChange={onChangePrintType}>
-          {printType.items.map(item => (
-            <DropdownItem key={item.key} value={item.key}>{item.value}</DropdownItem>
-          ))}
-        </Dropdown>
+        <FilterDropdown
+          selector={printType.select}
+          onChange={printType.set}
+          defaultValue={printType.defaultValue}
+          items={printType.items}
+        />
 
-        <Dropdown value={sortingValue} defaultValue={sorting.defaultValue} onChange={onChangeSorting}>
-          {sorting.items.map(item => (
-            <DropdownItem key={item.key} value={item.key}>{item.value}</DropdownItem>
-          ))}
-        </Dropdown>
+        <FilterDropdown
+          selector={sorting.select}
+          onChange={sorting.set}
+          defaultValue={sorting.defaultValue}
+          items={sorting.items}
+        />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    filterValue: filter.select(state),
-    printTypeValue: printType.select(state),
-    sortingValue: sorting.select(state),
-  }
-};
-
-const mapDispatchToProps = {
-  onChangeFilter: filter.set,
-  onChangePrintType: printType.set,
-  onChangeSorting: sorting.set,
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(FilterToolbar);
+export default FilterToolbar;
