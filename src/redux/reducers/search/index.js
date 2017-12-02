@@ -130,7 +130,7 @@ export function* isSearchPage() {
   }
 }
 
-function* updateSearchStateFromRouter({payload}) {
+export function* updateSearchStateFromRouter({payload}) {
   if (!(yield call(isSearchPage))) {
     return;
   }
@@ -229,13 +229,12 @@ function* computeGoogleSearchParams() {
 }
 
 let lastParamsStr;
-function* performSearch() {
+export function* performSearch() {
   if (!(yield call(isSearchPage))) {
     return;
   }
 
   const term = yield select(termStuff.select);
-  console.log('term', term);
   const params = yield call(computeGoogleSearchParams);
   // TODO: подумать о другом способе
   const paramsStr = JSON.stringify(params);
