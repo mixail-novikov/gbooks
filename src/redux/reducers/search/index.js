@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import * as qs from 'query-string';
 import { get, flow } from 'lodash';
 
-import { loadBooks } from '../../../api/loadBooks';
+import { loadBooks } from '../../../api';
 
 import {
   filter as filterEnum,
@@ -254,6 +254,7 @@ export function* performSearch() {
       totalItems,
     }));
   } catch (e) {
+    console.log(e);
     yield put(setNoResults(term));
     return;
   } finally {
