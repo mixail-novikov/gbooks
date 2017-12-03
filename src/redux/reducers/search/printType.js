@@ -1,16 +1,7 @@
 import { createAction, createReducer } from 'redux-act';
+import { items, defaultValue } from '../../../enums/printType';
 
-export const defaultValue = "all";
-export const items = [{
-  key: "all",
-  value: "Any document",
-}, {
-  key: "books",
-  value: "Books",
-}, {
-  key: "magazines",
-  value: "Magazines",
-}]
+export { items, defaultValue};
 
 const allowedValues = items.map(item => item.key);
 export const set = createAction('set printType', (input) => allowedValues.includes(input) ? input : defaultValue);

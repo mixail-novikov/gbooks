@@ -1,38 +1,37 @@
-import * as filterStuff from './filter';
-import * as termStuff from './term';
-import * as printTypeStuff from './printType';
-import * as sortingStuff from './sorting';
-
 import { createAction, createReducer, batch } from 'redux-act';
 import { combineReducers } from 'redux';
 import * as qs from 'query-string';
-import { get } from 'lodash';
+import { get, flow } from 'lodash';
+
+import { loadBooks } from '../../../api/loadBooks';
+
+import {
+  filter as filterEnum,
+  sorting as sortingEnum,
+  printType as printTypeEnum,
+} from '../../../enums';
 
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 
-import axios from 'axios';
-
 import { push, LOCATION_CHANGE } from 'react-router-redux';
 import { matchPath } from 'react-router';
-
-export { filterStuff as filter, termStuff as term, printTypeStuff as printType, sortingStuff as sorting };
-
-export const startStoreSync = createAction('start store sync');
-export const stopStoreSync = createAction('start store sync');
 
 export const runSearch = createAction('run search');
 
 export const resultsLoaded = createAction('results loaded');
 
+const selectSearch = (state) => state.newSearch || {};
+const selectSearchResults = flow(selectSearch, searchState => searchState.results || {});
+
 const responseTimeReducer = createReducer({
   [resultsLoaded]: (state, {responseTime=0}) => responseTime,
 }, 0);
-export const selectResponseTime = (state) => state.newSearch.results.responseTime;
+export const selectResponseTime = flow(selectSearchResults, resultsState => resultsState.responseTime || 0);
 
 const resultsCountReducer = createReducer({
-  [resultsLoaded]: (state, {count=0}) => count,
+  [resultsLoaded]: (state, {totalItems=0}) => Number(totalItems),
 }, 0);
-export const selectResultsCount = (state) => state.newSearch.results.resultsCount;
+export const selectResultsCount = flow(selectSearchResults, resultsState => resultsState.resultsCount || 0);
 
 export const setNoResults = createAction('set no results');
 
@@ -86,11 +85,37 @@ const filterPanelReducer = combineReducers({
   touched: filterPanelTouchedRedcuer,
 });
 
+const setSearchParamByKey = createAction('set search param', (key, value) => ({key, value}));
+
+export const createSearchParamSetter = (key) => (value) => setSearchParamByKey.call(null, key, value);
+export const createSearchParamSelector = (key) => (store) => store.newSearch.searchParams[key];
+
+export const setSearchFilter = createSearchParamSetter('filter');
+export const selectSearchFilter = createSearchParamSelector('filter');
+
+export const setSorting = createSearchParamSetter('sorting');
+export const selectSorting = createSearchParamSelector('sorting');
+
+export const setPrintType = createSearchParamSetter('printType');
+export const selectPrintType = createSearchParamSelector('printType');
+
+export const setTerm = createSearchParamSetter('term');
+export const selectTerm = createSearchParamSelector('term');
+
+const setSearchParams = createAction('set search params');
+const selectSearchParams = (state) => state.newSearch.searchParams;
+
+const searchParamsReducer = createReducer({
+  [setSearchParamByKey]: (state, {key, value}) => ({...state, [key]: value}),
+  [setSearchParams]: (state, newState) => newState,
+}, {
+  filter: filterEnum.defaultValue,
+  sorting: sortingEnum.defaultValue,
+  printType: printTypeEnum.defaultValue
+});
+
 export default combineReducers({
-  filter: filterStuff.reducer,
-  printType: printTypeStuff.reducer,
-  orderBy: sortingStuff.reducer,
-  term: termStuff.reducer,
+  searchParams: searchParamsReducer,
   results: resultsReducer,
   loading: loadingReducer,
   filterPanel: filterPanelReducer,
@@ -99,9 +124,9 @@ export default combineReducers({
 export const isFilterPanelVisible = (state) => state.newSearch.filterPanel.touched ? state.newSearch.filterPanel.visible : isFilterPanelVisibleInnerSelector(state);
 
 export const isFilterPanelVisibleInnerSelector = (state) => {
-  const isPrintTypeSelected = printTypeStuff.select(state) !== printTypeStuff.defaultValue;
-  const isFilterSelected = filterStuff.select(state) !== filterStuff.defaultValue;
-  const isSortingSelected = sortingStuff.select(state) !== sortingStuff.defaultValue;
+  const isPrintTypeSelected = selectPrintType(state) !== printTypeEnum.defaultValue;
+  const isFilterSelected = selectSearchFilter(state) !== filterEnum.defaultValue;
+  const isSortingSelected = selectSorting(state) !== sortingEnum.defaultValue;
 
   return isPrintTypeSelected || isFilterSelected || isSortingSelected;
 }
@@ -113,9 +138,7 @@ export function* newSearchSaga() {
   yield takeLatest(LOCATION_CHANGE, performSearch);
   yield takeLatest([
     runSearch.getType(),
-    filterStuff.set.getType(),
-    sortingStuff.set.getType(),
-    printTypeStuff.set.getType(),
+    // setSearchParams.getType(),
   ], updateRouterFromSearchState);
   yield takeLatest(goToSearchPage.getType(), goToSearchPageSaga);
 }
@@ -137,12 +160,12 @@ export function* updateSearchStateFromRouter({payload}) {
 
   const search = yield select(state => get(state, 'router.location.search', ''));
   const searchObj = qs.parse(search);
-  yield put(batch(
-    filterStuff.set.raw(searchObj.fltr),
-    printTypeStuff.set.raw(searchObj.prnt),
-    sortingStuff.set.raw(searchObj.srt),
-    termStuff.set.raw(searchObj.trm),
-  ));
+  yield put(setSearchParams({
+    filter: searchObj.fltr,
+    printType: searchObj.prnt,
+    sorting: searchObj.srt,
+    term: searchObj.trm,
+  }));
 }
 
 function* updateRouterFromSearchState() {
@@ -156,10 +179,10 @@ function* updateRouterFromSearchState() {
 
 function* selectSearchState() {
   return yield select(state => ({
-    filter: filterStuff.select(state),
-    orderBy: sortingStuff.select(state),
-    printType: printTypeStuff.select(state),
-    term: termStuff.select(state),
+    filter: selectSearchFilter(state),
+    orderBy: selectSorting(state),
+    printType: selectPrintType(state),
+    term: selectTerm(state),
   }));
 }
 
@@ -175,19 +198,19 @@ function* computeSearchString() {
   const search = yield select(state => get(state, 'router.location.search'));
 
   const newSearchParams = qs.parse(search);
-  if (filter !== filterStuff.defaultValue) {
+  if (filter !== filterEnum.defaultValue) {
     newSearchParams['fltr'] = filter;
   } else {
     delete newSearchParams['fltr'];
   }
 
-  if (printType !== printTypeStuff.defaultValue) {
+  if (printType !== printTypeEnum.defaultValue) {
     newSearchParams['prnt'] = printType;
   } else {
     delete newSearchParams['prnt'];
   }
 
-  if (orderBy !== sortingStuff.defaultValue) {
+  if (orderBy !== sortingEnum.defaultValue) {
     newSearchParams['srt'] = orderBy;
   } else {
     delete newSearchParams['srt'];
@@ -202,70 +225,40 @@ function* computeSearchString() {
   return qs.stringify(newSearchParams);
 }
 
-function* computeGoogleSearchParams() {
-  const { term, filter, orderBy, printType } = yield call(selectSearchState);
-
-  if (!term) {
-    throw Error('Term is required');
-  }
-
-  const params = {
-    q: term,
-  };
-
-  if (filter !== filterStuff.defaultValue) {
-    params['filter'] = filter;
-  }
-
-  if (orderBy !== sortingStuff.defaultValue) {
-    params['orderBy'] = orderBy;
-  }
-
-  if (printType !== printTypeStuff.defaultValue) {
-    params['printType'] = printType;
-  }
-
-  return params;
-}
-
-let lastParamsStr;
+// let lastParamsStr;
 export function* performSearch() {
   if (!(yield call(isSearchPage))) {
     return;
   }
 
-  const term = yield select(termStuff.select);
-  const params = yield call(computeGoogleSearchParams);
-  // TODO: подумать о другом способе
-  const paramsStr = JSON.stringify(params);
-  if (paramsStr === lastParamsStr) {
-    return;
-  }
-  let startTime = Date.now();
-  yield put(startLoading());
+  const term = yield select(selectTerm);
+  // const sorting = yield select(sortingStuff.select);
+  // const printType = yield select(printTypeStuff.select);
+  // const filter = true; //yield select(filterStuff.select);
 
-  let resp;
+  // const params = yield call(computeGoogleSearchParams);
+  // // TODO: подумать о другом способе
+  // const paramsStr = JSON.stringify(params);
+  // if (paramsStr === lastParamsStr) {
+  //   return;
+  // }
+
+  yield put(startLoading());
   try {
-    resp = yield call(axios, 'https://www.googleapis.com/books/v1/volumes', {params});
+    const searchParams = yield select(selectSearchParams);
+    const { data: { items, totalItems, responseTime } } = yield call(loadBooks, searchParams);
+
+    yield put(resultsLoaded({
+      responseTime,
+      items,
+      totalItems,
+    }));
   } catch (e) {
     yield put(setNoResults(term));
     return;
   } finally {
     yield put(finishLoading());
-    lastParamsStr = paramsStr;
-  }
-
-  const items = get(resp, 'data.items', []);
-
-  if (items.length) {
-    // TODO на один экшен навесть несколько редьюсеров
-    yield put(resultsLoaded({
-      items,
-      count: get(resp, 'data.totalItems'),
-      responseTime: Date.now() - startTime,
-    }));
-  } else {
-    yield put(setNoResults(term));
+    // lastParamsStr = paramsStr;
   }
 }
 

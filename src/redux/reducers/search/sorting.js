@@ -1,13 +1,7 @@
 import { createAction, createReducer } from 'redux-act';
+import { items, defaultValue } from '../../../enums/sorting';
 
-export const defaultValue = "relevance";
-export const items = [{
-  key: "relevance",
-  value: "Sorted by relevance",
-}, {
-  key: "newest",
-  value: "Sorted by date",
-}];
+export { items, defaultValue};
 
 const allowedValues = items.map(item => item.key);
 export const set = createAction('set sorting', (input) => allowedValues.includes(input) ? input : defaultValue);

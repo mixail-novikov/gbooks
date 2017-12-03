@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { term, runSearch } from '../../../../redux/reducers/search';
+import { setTerm, runSearch } from '../../../../redux/reducers/search';
 import { selectSpeechPopup, closeSpeechPopup } from '../../../../redux/reducers/speech';
 import SpeechRecognition from '../SpeechRecognition';
 
@@ -23,7 +23,7 @@ export default connect(
   }),
   (dispatch) => ({
     onRecognize: (value) => {
-      dispatch(term.set(value));
+      dispatch(setTerm(value));
       dispatch(runSearch());
       dispatch(closeSpeechPopup());
     },

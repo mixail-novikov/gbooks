@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { filter } from '../../../redux/reducers/search';
 import { Dropdown, DropdownItem } from '../../Dropdown';
 
 class FilterDropdown extends Component {

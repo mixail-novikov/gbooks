@@ -1,25 +1,9 @@
-import { createAction, createReducer } from 'redux-act';
+import { items, defaultValue } from '../../../enums/filter';
+import { createSearchParamSetter, createSearchParamSelector } from './';
 
-export const defaultValue = "all";
-export const items = [{
-  key: "all",
-  value: "Any books",
-}, {
-  key: "partial",
-  value: "Preview available"
-}, {
-  key: "ebooks",
-  value: "Google eBooks"
-}, {
-  key: "free-ebooks",
-  value: "Free Google eBooks"
-},];
+export { items, defaultValue};
 
 const allowedValues = items.map(item => item.key);
-export const set = createAction('set search filter', (input) => allowedValues.includes(input) ? input : defaultValue);
 
-export const select = (state) => state.newSearch.filter;
-
-export const reducer = createReducer({
-  [set]: (state, filter) => filter,
-}, defaultValue);
+// export const set = createSearchParamSetter('filter');
+// export const select = createSearchParamSelector('filter');

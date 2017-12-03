@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { term, runSearch } from '../../../../../redux/reducers/search';
+import { selectTerm, setTerm, runSearch } from '../../../../../redux/reducers/search';
 import { openSpeechPopup } from '../../../../../redux/reducers/speech';
 
 
@@ -57,11 +57,11 @@ class SearchForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  term: term.select(state),
+  term: selectTerm(state),
 });
 
 const mapDispatchToProps = {
-  onTermChange: term.set,
+  onTermChange: setTerm,
   onSubmit: runSearch,
   onMicrophoneClick: openSpeechPopup,
 };
