@@ -3,7 +3,7 @@ import c from 'classnames';
 import { string } from 'prop-types';
 import { connect } from 'react-redux';
 
-import { selectResultsCount, selectResponseTime } from '../../../../redux/reducers/search';
+import { selectors } from '../../../../redux/reducers/search/results';
 
 import './style.css';
 
@@ -24,8 +24,8 @@ class SearchResults extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  count: selectResultsCount(state),
-  time: selectResponseTime(state),
+  count: selectors.selectResultsCount(state),
+  time: selectors.selectResponseTime(state),
 });
 
 export default connect(

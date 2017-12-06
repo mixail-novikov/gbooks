@@ -1,4 +1,4 @@
-export default (startTime) => (data, finishTime = Date.now()) => {
+export default (startTime) => (data, headers, finishTime = Date.now()) => {
   if (!data || !data.totalItems) {
     throw Error('No results');
   }

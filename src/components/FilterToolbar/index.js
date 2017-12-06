@@ -24,8 +24,6 @@ class FilterToolbar extends Component {
   render() {
     const { className } = this.props;
 
-    console.log(selectSearchFilter)
-
     return (
       <div className={c('FilterToolbar', className)}>
         <FilterDropdown

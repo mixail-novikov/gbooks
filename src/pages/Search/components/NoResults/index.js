@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { selectNoResultsTerm, runSearch } from '../../../../redux/reducers/search';
+import { resultsSelectors, runSearch } from '../../../../redux/reducers/search';
 import './style.css';
 
 class NoResults extends Component {
@@ -24,7 +24,7 @@ class NoResults extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  searchTerm: selectNoResultsTerm(state),
+  searchTerm: resultsSelectors.selectNoResultsTerm(state),
 })
 
 const mapDispatchToProps = {};

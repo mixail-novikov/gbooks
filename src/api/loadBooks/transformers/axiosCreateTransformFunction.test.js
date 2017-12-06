@@ -41,7 +41,7 @@ describe('createTransformFunction', () => {
 
     it('must compute responseTime', () => {
       const finishTime = Date.now() + 1000;
-      const actualResult = func({totalItems: 1}, finishTime);
+      const actualResult = func({totalItems: 1}, {}, finishTime);
       expect(actualResult.responseTime).toEqual(finishTime - startTime);
     });
   })
