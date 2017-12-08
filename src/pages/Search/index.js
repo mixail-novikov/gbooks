@@ -19,7 +19,9 @@ import './style.css';
 
 class Search extends Component {
   render() {
-    const { noResults, hasBooks, isLoading, isFilterPanelVisible } = this.props;
+    const {
+      noResults, hasBooks, isLoading, isFilterPanelVisible,
+    } = this.props;
 
     return (
       <div className="SearchPage">
@@ -31,19 +33,21 @@ class Search extends Component {
               <div className="SearchPage__stuff">
                 <ReactCSSTransitionGroup
                   transitionName="SearchPage__results-count"
-                  transitionEnter={true}
+                  transitionEnter
                   transitionEnterTimeout={220}
-                  transitionLeave={true}
-                  transitionLeaveTimeout={220}>
+                  transitionLeave
+                  transitionLeaveTimeout={220}
+                >
                   {!isFilterPanelVisible && <SearchResults className="SearchPage__results-count" />}
                 </ReactCSSTransitionGroup>
                 <div className="SearchPage__filter-panel-wrapper">
                   <ReactCSSTransitionGroup
                     transitionName="SearchPage__filter-panel"
-                    transitionEnter={true}
+                    transitionEnter
                     transitionEnterTimeout={220}
-                    transitionLeave={true}
-                    transitionLeaveTimeout={220}>
+                    transitionLeave
+                    transitionLeaveTimeout={220}
+                  >
                     {isFilterPanelVisible && <FilterToolbar className="SearchPage__filter-panel" />}
                   </ReactCSSTransitionGroup>
                 </div>
@@ -59,18 +63,18 @@ class Search extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   noResults: resultsSelectors.selectNoResultsStatus(state),
   hasBooks: hasBooks(state),
   isLoading: selectLoadingStatus(state),
   isFilterPanelVisible: isFilterPanelVisible(state),
-})
+});
 
 const mapDispatchToProps = {
-  runSearch
+  runSearch,
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Search);

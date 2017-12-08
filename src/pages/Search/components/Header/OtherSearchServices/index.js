@@ -6,7 +6,7 @@ import './style.css';
 
 import { selectTerm } from '../../../../../redux/reducers/search';
 
-const getUrl = (term, tab) => `https://www.google.com/search?q=${encodeURIComponent(term)}${tab ? `&tbm=${tab}` : ''}`
+const getUrl = (term, tab) => `https://www.google.com/search?q=${encodeURIComponent(term)}${tab ? `&tbm=${tab}` : ''}`;
 
 class OtherSearchServices extends Component {
   render() {
@@ -14,27 +14,27 @@ class OtherSearchServices extends Component {
 
     const services = [{
       name: 'All',
-      url: getUrl(term)
+      url: getUrl(term),
     }, {
       name: 'Images',
-      url: getUrl(term, 'isch')
+      url: getUrl(term, 'isch'),
     }, {
       name: 'Videos',
-      url: getUrl(term, 'vid')
+      url: getUrl(term, 'vid'),
     }, {
       name: 'News',
-      url: getUrl(term, 'nws')
+      url: getUrl(term, 'nws'),
     }, {
       name: 'Books',
       isActive: true,
-    }]
+    }];
 
     return (
       <div className={c('OtherSearchServices', className)}>
         {services.map(service => (
           <div
             key={service.name}
-            className={c('OtherSearchServices__item', {'OtherSearchServices__item_active': service.isActive})}
+            className={c('OtherSearchServices__item', { OtherSearchServices__item_active: service.isActive })}
           >
             {service.isActive
               ? service.name
@@ -43,14 +43,12 @@ class OtherSearchServices extends Component {
           </div>
         ))}
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   term: selectTerm(state),
-})
+});
 
-export default connect(
-  mapStateToProps,
-)(OtherSearchServices);
+export default connect(mapStateToProps)(OtherSearchServices);

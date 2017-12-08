@@ -27,7 +27,7 @@ const getDescriptionFromBook = (book) => {
 
   return sanitizeHtml(desc, {
     allowedTags: ['b'],
-  })
+  });
 };
 
 const getBookInfoFromBook = (book) => {
@@ -39,11 +39,11 @@ const getBookInfoFromBook = (book) => {
   return {
     authors,
     year,
-  }
+  };
 };
 
 const getImageUrlFromBook = (book) => {
-  const { smallThumbnail, thumbnail } = get(book, 'volumeInfo.imageLinks', {})
+  const { smallThumbnail, thumbnail } = get(book, 'volumeInfo.imageLinks', {});
 
   return thumbnail || smallThumbnail;
 };
@@ -61,7 +61,7 @@ const getLinksFromBook = (book) => {
     link: previewLink,
     previewLink: embeddable ? previewLink : '',
     greenLink,
-  }
+  };
 };
 
 const transformBook = (book) => {
@@ -79,20 +79,20 @@ const transformBook = (book) => {
     imageUrl,
     ...getBookInfoFromBook(book),
     ...getLinksFromBook(book),
-  }
+  };
 };
 
-export const insertBooks = createAction('insert books', (books) => books.map(transformBook));
+export const insertBooks = createAction('insert books', books => books.map(transformBook));
 
 export default createReducer({
   [setNoResults]: () => ([]),
   [insertBooks]: (state, books) => books,
-  [resultsLoaded]: (state, {items}) => items.map(transformBook),
+  [resultsLoaded]: (state, { items }) => items.map(transformBook),
 }, []);
 
-export const selectBooks = (state) => state.books;
+export const selectBooks = state => state.books;
 
 export const hasBooks = (state) => {
   const books = selectBooks(state);
   return books.length > 0;
-}
+};

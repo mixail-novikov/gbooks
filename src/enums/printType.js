@@ -8,16 +8,16 @@ export type PrintTypeItem = {
 };
 
 export const items: Array<PrintTypeItem> = [{
-  key: "all",
-  value: "Any document",
+  key: 'all',
+  value: 'Any document',
 }, {
-  key: "books",
-  value: "Books",
+  key: 'books',
+  value: 'Books',
 }, {
-  key: "magazines",
-  value: "Magazines",
+  key: 'magazines',
+  value: 'Magazines',
 }];
 
 export const itemValues: Array<PrintTypeValue> = items.map(item => item.key);
 
-export const defaultValue: PrintTypeValue = "all";
+export const defaultValue: PrintTypeValue = 'all';

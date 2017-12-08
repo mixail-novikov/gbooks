@@ -10,11 +10,9 @@ export default function configureStore(initialState) {
   return createStore(
     rootReducer,
     initialState,
-    composeWithDevTools(
-      applyMiddleware(
-        sagaMiddleware,
-        routerMiddleware,
-      )
-    )
+    composeWithDevTools(applyMiddleware(
+      sagaMiddleware,
+      routerMiddleware,
+    )),
   );
 }

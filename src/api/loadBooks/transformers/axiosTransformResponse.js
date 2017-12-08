@@ -16,7 +16,7 @@ Flow запрещает создание.
 
 */
 
-export default (startTime) => [].concat(
+export default startTime => [].concat(
   axios.defaults.transformResponse,
-  createTransformFunction(startTime)
+  createTransformFunction(startTime),
 );

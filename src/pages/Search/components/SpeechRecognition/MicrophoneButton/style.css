@@ -10,7 +10,7 @@
   background-color: #fff;
   border: 1px solid #eee;
   border-radius: 100%;
-  box-shadow: 0 2px 5px rgba(0,0,0,.1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   cursor: pointer;
   transition: background-color 0.218s,border 0.218s,box-shadow 0.218s;
   outline: none;
@@ -52,5 +52,5 @@
 .MicrophoneButton__icon {
   position: relative;
   top: 3px;
-  left: 0px;
+  left: 0;
 }

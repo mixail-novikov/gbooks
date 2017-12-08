@@ -14,12 +14,12 @@ describe('performSearch', () => {
     beforeEach(() => searchGen = gen.clone());
 
     it('must run only on search page', () => {
-      expect(searchGen.next().value).toEqual(call(isSearchPage))
+      expect(searchGen.next().value).toEqual(call(isSearchPage));
       expect(searchGen.next(false).done).toEqual(true);
-    })
+    });
 
     it('must continue search', () => {
-      expect(searchGen.next().value).toEqual(call(isSearchPage))
+      expect(searchGen.next().value).toEqual(call(isSearchPage));
       expect(searchGen.next(true).done).toEqual(false);
     });
   });
@@ -29,6 +29,6 @@ describe('newSearchSaga', () => {
   const gen = newSearchSaga();
 
   it('must run updateSearchStateFromRouter on LOCATION_CHANGE', () => {
-    expect(gen.next().value).toEqual(takeLatest(LOCATION_CHANGE, updateSearchStateFromRouter))
-  })
-})
+    expect(gen.next().value).toEqual(takeLatest(LOCATION_CHANGE, updateSearchStateFromRouter));
+  });
+});

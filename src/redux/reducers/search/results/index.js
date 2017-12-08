@@ -8,7 +8,7 @@ import * as selectors from './selectors';
 
 export { setNoResults, selectors };
 
-export default (listenForAction) => combineReducers({
+export default listenForAction => combineReducers({
   responseTime: createResponseTimeReducer(listenForAction),
   count: createResponseTimeReducer(listenForAction),
   noResults: createNoResultsReducer(listenForAction),

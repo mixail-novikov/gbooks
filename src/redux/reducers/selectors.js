@@ -1,1 +1,1 @@
-export const selectSearch = (state) => state.newSearch || {};
+export const selectSearch = state => state.newSearch || {};

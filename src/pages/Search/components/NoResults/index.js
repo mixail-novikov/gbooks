@@ -19,17 +19,17 @@ class NoResults extends Component {
           <li>Try fewer keywords.</li>
         </ul>
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   searchTerm: resultsSelectors.selectNoResultsTerm(state),
-})
+});
 
 const mapDispatchToProps = {};
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(NoResults);

@@ -20,12 +20,12 @@ import {
 
 import loadingReducer, {
   startLoading,
-  finishLoading
+  finishLoading,
 } from './loading';
 
 import createResultsReducer, {
   setNoResults,
-  selectors as resultsSelectors
+  selectors as resultsSelectors,
 } from './results';
 
 
@@ -35,7 +35,7 @@ export const runSearch = createAction('run search');
 
 export const resultsLoaded = createAction('results loaded');
 
-const selectSearch = (state) => state.newSearch || {};
+const selectSearch = state => state.newSearch || {};
 const selectSearchResults = flow(selectSearch, searchState => searchState.results || {});
 
 // export const selectResponseTime = flow(selectSearchResults, resultsState => resultsState.responseTime || 0);
@@ -61,10 +61,10 @@ const filterPanelReducer = combineReducers({
   touched: filterPanelTouchedReducer,
 });
 
-const setSearchParamByKey = createAction('set search param', (key, value) => ({key, value}));
+const setSearchParamByKey = createAction('set search param', (key, value) => ({ key, value }));
 
-export const createSearchParamSetter = (key) => (value) => setSearchParamByKey.call(null, key, value);
-export const createSearchParamSelector = (key) => (store) => store.newSearch.searchParams[key];
+export const createSearchParamSetter = key => value => setSearchParamByKey.call(null, key, value);
+export const createSearchParamSelector = key => store => store.newSearch.searchParams[key];
 
 export const setSearchFilter = createSearchParamSetter('filter');
 export const selectSearchFilter = createSearchParamSelector('filter');
@@ -79,7 +79,7 @@ export const setTerm = createSearchParamSetter('term');
 export const selectTerm = createSearchParamSelector('term');
 
 const setSearchParams = createAction('set search params', (searchState) => {
-  return mapValues(searchState, function(value, key) {
+  return mapValues(searchState, (value, key) => {
     switch (key) {
       case 'filter':
         return filterEnum.itemValues.includes(value) ? value : filterEnum.defaultValue;
@@ -92,20 +92,20 @@ const setSearchParams = createAction('set search params', (searchState) => {
     }
   });
 
-  let { filter, sorting, printType } = searchState;
+  const { filter, sorting, printType } = searchState;
   if (!filterEnum.includes(filter)) {
 
   }
 });
-const selectSearchParams = (state) => state.newSearch.searchParams;
+const selectSearchParams = state => state.newSearch.searchParams;
 
 const searchParamsReducer = createReducer({
-  [setSearchParamByKey]: (state, {key, value}) => ({...state, [key]: value}),
+  [setSearchParamByKey]: (state, { key, value }) => ({ ...state, [key]: value }),
   [setSearchParams]: (state, newState) => newState,
 }, {
   filter: filterEnum.defaultValue,
   sorting: sortingEnum.defaultValue,
-  printType: printTypeEnum.defaultValue
+  printType: printTypeEnum.defaultValue,
 });
 
 export default combineReducers({
@@ -115,7 +115,7 @@ export default combineReducers({
   filterPanel: filterPanelReducer,
 });
 
-export const isFilterPanelVisible = (state) => state.newSearch.filterPanel.touched ? state.newSearch.filterPanel.visible : isFilterPanelVisibleInnerSelector(state);
+export const isFilterPanelVisible = state => (state.newSearch.filterPanel.touched ? state.newSearch.filterPanel.visible : isFilterPanelVisibleInnerSelector(state));
 
 export const isFilterPanelVisibleInnerSelector = (state) => {
   const isPrintTypeSelected = selectPrintType(state) !== printTypeEnum.defaultValue;
@@ -123,7 +123,7 @@ export const isFilterPanelVisibleInnerSelector = (state) => {
   const isSortingSelected = selectSorting(state) !== sortingEnum.defaultValue;
 
   return isPrintTypeSelected || isFilterSelected || isSortingSelected;
-}
+};
 
 export const goToSearchPage = createAction('go to search page');
 
@@ -134,7 +134,7 @@ export const goToSearchPage = createAction('go to search page');
 //   ])
 // }
 
-const dropdownFilterChanged = (action) => action.type === setSearchParamByKey.getType() && action.payload.key !== 'term'
+const dropdownFilterChanged = action => action.type === setSearchParamByKey.getType() && action.payload.key !== 'term';
 
 export function* newSearchSaga() {
   yield takeLatest(LOCATION_CHANGE, updateSearchStateFromRouter);
@@ -151,7 +151,7 @@ export function* newSearchSaga() {
 export function* isSearchPage() {
   try {
     const pathname = yield select(state => state.router.location.pathname);
-    const { isExact } = matchPath(pathname, {path: '/search'});
+    const { isExact } = matchPath(pathname, { path: '/search' });
     return isExact;
   } catch (e) {
     return false;
@@ -163,7 +163,7 @@ function transformFromSearchParamsToRoute(searchParams, initObj = {}) {
     const { routeKey, stateKey, toRoute } = obj;
     res[routeKey] = toRoute(searchParams[stateKey]);
     return res;
-  }, initObj)
+  }, initObj);
 }
 
 function transformFromRouteToSearchParams(routeParams, initObj = {}) {
@@ -171,10 +171,10 @@ function transformFromRouteToSearchParams(routeParams, initObj = {}) {
     const { routeKey, stateKey, toState } = obj;
     res[stateKey] = toState(routeParams[routeKey]);
     return res;
-  }, initObj)
+  }, initObj);
 }
 
-export function* updateSearchStateFromRouter({payload}) {
+export function* updateSearchStateFromRouter({ payload }) {
   if (!(yield call(isSearchPage))) {
     return;
   }
@@ -211,11 +211,13 @@ function* goToSearchPageSaga() {
   yield put(push({
     pathname: '/search',
     search: yield call(computeSearchString),
-  }))
+  }));
 }
 
 function* computeSearchString() {
-  const { filter, orderBy, printType, term } = yield call(selectSearchState);
+  const {
+    filter, orderBy, printType, term,
+  } = yield call(selectSearchState);
   const search = yield select(state => get(state, 'router.location.search'));
 
   const newSearchParams = qs.parse(search);
@@ -269,4 +271,4 @@ export function* performSearch() {
   }
 }
 
-export const getSearchLinkByAuthor = (author) => `/search?trm=inauthor:"${encodeURIComponent(author)}"`;
+export const getSearchLinkByAuthor = author => `/search?trm=inauthor:"${encodeURIComponent(author)}"`;

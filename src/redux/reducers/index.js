@@ -10,4 +10,4 @@ export default combineReducers({
   speechPopup: speechReducer,
   router: routerReducer,
   newSearch: newSearchReducer,
-})
+});

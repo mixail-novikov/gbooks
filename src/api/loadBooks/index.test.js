@@ -1,7 +1,7 @@
 import loadBooks from './';
 
-import axios from 'axios'
-import { transformResponse, searchParamsToGoogle} from './transformers';
+import axios from 'axios';
+import { transformResponse, searchParamsToGoogle } from './transformers';
 
 jest.mock('axios');
 jest.mock('./transformers');
@@ -17,7 +17,7 @@ describe('loadBooks', () => {
     loadBooks(searchParams);
 
     expect(axios).toHaveBeenCalled();
-    expect(searchParamsToGoogle).toHaveBeenCalledWith(searchParams)
+    expect(searchParamsToGoogle).toHaveBeenCalledWith(searchParams);
     expect(transformResponse).toHaveBeenCalled();
-  })
-})
+  });
+});

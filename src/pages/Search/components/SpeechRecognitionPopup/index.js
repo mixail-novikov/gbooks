@@ -7,26 +7,26 @@ import SpeechRecognition from '../SpeechRecognition';
 
 class SpeechRecognitionPopup extends Component {
   render() {
-    const {isVisible, onRecognize, onClose } = this.props;
+    const { isVisible, onRecognize, onClose } = this.props;
 
     if (!isVisible) {
       return null;
     }
 
-    return <SpeechRecognition onClose={onClose} onRecognize={onRecognize} />
+    return <SpeechRecognition onClose={onClose} onRecognize={onRecognize} />;
   }
 }
 
 export default connect(
-  (state) => ({
+  state => ({
     isVisible: selectSpeechPopup(state),
   }),
-  (dispatch) => ({
+  dispatch => ({
     onRecognize: (value) => {
       dispatch(setTerm(value));
       dispatch(runSearch());
       dispatch(closeSpeechPopup());
     },
     onClose: () => dispatch(closeSpeechPopup()),
-  })
+  }),
 )(SpeechRecognitionPopup);

@@ -5,7 +5,9 @@ import { Dropdown, DropdownItem } from '../../Dropdown';
 
 class FilterDropdown extends Component {
   render() {
-    const { value, onChange, defaultValue, items } = this.props;
+    const {
+      value, onChange, defaultValue, items,
+    } = this.props;
 
     return (
       <Dropdown value={value} defaultValue={defaultValue} onChange={onChange}>
@@ -13,19 +15,19 @@ class FilterDropdown extends Component {
           <DropdownItem key={item.key} value={item.key}>{item.value}</DropdownItem>
         ))}
       </Dropdown>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state, {selector}) => ({
+const mapStateToProps = (state, { selector }) => ({
   value: selector(state),
 });
 
-const mapDispatchToProps = (dispatch, {onChange}) => ({
-  onChange: (value) => dispatch(onChange(value)),
+const mapDispatchToProps = (dispatch, { onChange }) => ({
+  onChange: value => dispatch(onChange(value)),
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(FilterDropdown);

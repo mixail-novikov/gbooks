@@ -3,10 +3,10 @@ import * as selectors from '../selectors';
 
 export const selectLoadingStatus = flow(
   selectors.selectSearch,
-  searchState => searchState.loading
+  searchState => searchState.loading,
 );
 
 export const selectSearchResults = flow(
   selectors.selectSearch,
-  searchState => searchState.results
+  searchState => searchState.results,
 );
