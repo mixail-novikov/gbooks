@@ -28,9 +28,25 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow",
-    "coverage": "react-scripts test --env=jsdom --coverage"
+    "coverage": "react-scripts test --env=jsdom --coverage",
+    "jslint": "eslint ./src/**/*.js --cache --ignore-pattern .gitignore",
+    "csslint": "stylelint --cache=true ./src/**/*.css",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": ["eslint --fix", "npm run jslint", "git add"],
+    "*.css": ["stylelint --fix", "npm run csslint", "git add"]
   },
   "devDependencies": {
-    "redux-devtools-extension": "^2.13.2"
+    "eslint": "4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-jsx-a11y": "6.0.2",
+    "eslint-plugin-react": "7.4.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
+    "redux-devtools-extension": "^2.13.2",
+    "stylelint": "8.3.0",
+    "stylelint-config-standard": "^18.0.0"
   }
 }
