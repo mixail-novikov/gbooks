@@ -29,17 +29,25 @@
     "eject": "react-scripts eject",
     "flow": "flow",
     "coverage": "react-scripts test --env=jsdom --coverage",
-    "jslint": "eslint ./src/**/*.js --cache --ignore-pattern .gitignore",
-    "csslint": "stylelint --cache=true ./src/**/*.css",
+    "jslint": "eslint --parser babel-eslint --plugin flowtype --fix ./src/**/*.js --cache --ignore-pattern .gitignore",
+    "csslint": "stylelint --fix --cache=true ./src/**/*.css",
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "npm run jslint", "git add"],
-    "*.css": ["stylelint --fix", "npm run csslint", "git add"]
+    "*.js": [
+      "npm run jslint",
+      "git add"
+    ],
+    "*.css": [
+      "npm run csslint",
+      "git add"
+    ]
   },
   "devDependencies": {
+    "babel-eslint": "^8.0.3",
     "eslint": "4.9.0",
     "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-flowtype": "^2.39.1",
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-jsx-a11y": "6.0.2",
     "eslint-plugin-react": "7.4.0",
