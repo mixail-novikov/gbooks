@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import c from 'classnames';
 
 import { selectTerm, setTerm, runSearch } from '../../../../../redux/reducers/search';
 import { openSpeechPopup } from '../../../../../redux/reducers/speech';
@@ -11,11 +12,11 @@ import SearchIcon from './SearchIcon';
 
 class SearchForm extends Component {
   render() {
-    const { term, onMicrophoneClick } = this.props;
+    const { term, onMicrophoneClick, className } = this.props;
 
     return (
       <form
-        className="SearchFormInner"
+        className={c('SearchFormInner', className)}
         onSubmit={this.handleSubmit}
       >
         <input

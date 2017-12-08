@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import SearchForm from './SearchForm';
 import LogoImage from '../../../../components/Logo';
+
+import SearchForm from './SearchForm';
+import OtherSearchServices from './OtherSearchServices';
+
 import './style.css';
 
 import { setFilterPanelVisibility, isFilterPanelVisible } from '../../../../redux/reducers/search';
@@ -16,8 +19,13 @@ class Header extends Component {
           <LogoImage className="SearchHeader__logo" />
         </div>
         <div className="SearchHeader__content-holder">
-          <SearchForm />
-          <button onClick={this.handleToolsClick}>toggle</button>
+          <SearchForm className="SearchHeader__form" />
+          <div className="SearchHeader__rich-tools">
+            <OtherSearchServices className="SearchHeader__other-services" />
+            <div className="SearchHeader__tools">
+              <button onClick={this.handleToolsClick}>toggle</button>
+            </div>
+          </div>
         </div>
       </div>
     );

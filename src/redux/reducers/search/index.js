@@ -257,6 +257,7 @@ export function* performSearch() {
       responseTime,
       items,
       totalItems,
+      term: searchParams.term,
     }));
   } catch (e) {
     console.log(e);

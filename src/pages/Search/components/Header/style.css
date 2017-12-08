@@ -2,8 +2,7 @@
   background-color: #fafafa;
   border-bottom: 1px solid #ebebeb;
   display: flex;
-  padding: 20px 13px;
-  height: 82px; /* TODO tmp */
+  padding: 20px 13px 0;
 }
 
 .SearchHeader__logo-holder {
@@ -15,4 +14,21 @@
 .SearchHeader__logo {
   margin-top: 4px;
   width: 120px;
+}
+
+.SearchHeader__form {
+  margin-bottom: 16px;
+}
+
+.SearchHeader__rich-tools {
+  display: flex;
+}
+
+.SearchHeader__other-services {
+
+}
+
+.SearchHeader__tools {
+  align-self: center;
+  margin-left: auto;
 }
