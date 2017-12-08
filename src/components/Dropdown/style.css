@@ -3,10 +3,7 @@
   font-size: 13px;
   color: #777;
   position: relative;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-right: 16px;
-  padding-left: 15px;
+  padding: 0 16px 0 22px;
   line-height: 22px;
   cursor: pointer;
 }

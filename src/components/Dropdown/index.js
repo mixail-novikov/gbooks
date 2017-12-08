@@ -102,12 +102,12 @@ export class Dropdown extends Component {
           "Dropdown": true,
           "Dropdown_is_opened": isOpened,
         })}
-        ref={this.setRef} 
+        ref={this.setRef}
       >
         <div className={c({
           "Dropdown__value": true,
           "Dropdown__value_is_default": value === defaultValue,
-        })} onClick={this.handleClick}>{childrenMap[value]}</div>
+        })} onClick={this.handleClick}>{childrenMap[value] || 'Select'}</div>
         <div className="Dropdown__items">{this.props.children}</div>
       </div>
     );
