@@ -12,7 +12,7 @@
   font-weight: bold;
 }
 
-.Dropdown__value:after {
+.Dropdown__value::after {
   content: '';
   margin-left: 4px;
   display: inline-block;
@@ -32,7 +32,7 @@
   color: #222;
 }
 
-.Dropdown__value:hover:after {
+.Dropdown__value:hover::after {
   border-color: #222 transparent;
 }
 
@@ -40,7 +40,7 @@
   color: #4285f4;
 }
 
-.Dropdown__value:active:after {
+.Dropdown__value:active::after {
   border-color: #4285f4 transparent;
 }
 
@@ -52,8 +52,7 @@
   left: -15px;
   background: #fff;
   border: 1px solid #d6d6d6;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.16);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.16);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16);
   color: #777;
   line-height: 17px;
   padding-top: 5px;

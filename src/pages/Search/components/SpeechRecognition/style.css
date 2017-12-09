@@ -5,15 +5,13 @@
   left: 0;
   right: 0;
   background: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   margin: 0;
   min-width: 100%;
   overflow: hidden;
   padding: 24px 0 24px 133px;
   box-sizing: border-box;
 }
-
-.SpeechRecognition__content {}
 
 .SpeechRecognition__content-item {
   display: inline-block;

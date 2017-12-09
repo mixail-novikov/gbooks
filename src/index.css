@@ -1,4 +1,6 @@
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 
@@ -8,10 +10,12 @@ body {
   font-family: Arial, sans-serif;
 }
 
-*, *:before, *:after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 /* FF dotted border remove */
-:focus {outline:none;}
-::-moz-focus-inner {border:0;}
+::-moz-focus-inner { border: 0; }
+:focus { outline: none; }
