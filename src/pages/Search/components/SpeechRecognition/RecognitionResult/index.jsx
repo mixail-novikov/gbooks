@@ -32,6 +32,11 @@ class RecognitionResult extends PureComponent {
     isFinish: PropTypes.bool,
   };
 
+  static defaultProps = {
+    result: '',
+    isFinish: false,
+  };
+
   render() {
     const { isFinish, result } = this.props;
     const [commonPart, restPart] = calcParts(result, isFinish);
