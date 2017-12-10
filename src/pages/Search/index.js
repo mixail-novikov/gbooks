@@ -27,8 +27,9 @@ class Search extends Component {
   }
 
   componentDidMount() {
-    console.log('mounted');
+    console.log('mounted'); // eslint-disable-line
   }
+
   render() {
     const {
       noResults, hasBooks, isLoading, isFilterPanelVisible,
