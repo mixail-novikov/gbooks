@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class RecognitionInvitation extends Component {
   state = {
-    text: 'Speak now'
+    text: 'Speak now',
   };
 
   _mounted = true;
@@ -11,7 +11,7 @@ class RecognitionInvitation extends Component {
     setTimeout(() => {
       this._mounted && this.setState({
         text: 'Listening...',
-      })
+      });
     }, 1500);
   }
 

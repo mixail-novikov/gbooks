@@ -32,15 +32,15 @@ export class Dropdown extends Component {
       onSelect: this.handleOnSelect,
       value: this.props.value,
       registerChild: this.registerChild,
-    }
+    };
   }
 
   registerChild = (key, value) => {
-    this.setState((state) => ({
+    this.setState(state => ({
       childrenMap: {
         ...state.childrenMap,
-        [key]: value
-      }
+        [key]: value,
+      },
     }));
   };
 
@@ -59,7 +59,7 @@ export class Dropdown extends Component {
 
   toggle() {
     this.setState((state) => {
-      const isOpened = !state.isOpened
+      const isOpened = !state.isOpened;
 
       if (isOpened) {
         this.addOutsideClickListener();
@@ -68,8 +68,8 @@ export class Dropdown extends Component {
       }
 
       return {
-        isOpened
-      }
+        isOpened,
+      };
     });
   }
 
@@ -80,7 +80,7 @@ export class Dropdown extends Component {
     if (!isClickInside) {
       this.setState({
         isOpened: false,
-      })
+      });
     }
   }
 
@@ -99,15 +99,19 @@ export class Dropdown extends Component {
     return (
       <div
         className={c({
-          "Dropdown": true,
-          "Dropdown_is_opened": isOpened,
+          Dropdown: true,
+          Dropdown_is_opened: isOpened,
         })}
         ref={this.setRef}
       >
-        <div className={c({
-          "Dropdown__value": true,
-          "Dropdown__value_is_default": value === defaultValue,
-        })} onClick={this.handleClick}>{childrenMap[value] || 'Select'}</div>
+        <div
+          className={c({
+          Dropdown__value: true,
+          Dropdown__value_is_default: value === defaultValue,
+        })}
+          onClick={this.handleClick}
+        >{childrenMap[value] || 'Select'}
+        </div>
         <div className="Dropdown__items">{this.props.children}</div>
       </div>
     );
@@ -131,10 +135,13 @@ export class DropdownItem extends Component {
 
   render() {
     return (
-      <div className={c({
-        "DropdownItem": true,
-        "DropdownItem_is_active": this.context.value === this.props.value,
-      })} onClick={this.handleClick}>
+      <div
+        className={c({
+        DropdownItem: true,
+        DropdownItem_is_active: this.context.value === this.props.value,
+      })}
+        onClick={this.handleClick}
+      >
         {this.props.children}
       </div>
     );

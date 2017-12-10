@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "classnames": "^2.2.5",
+    "eslint-plugin-jest": "^21.4.2",
     "flow": "^0.2.3",
     "flow-bin": "^0.60.1",
     "history": "^4.7.2",

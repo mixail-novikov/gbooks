@@ -5,39 +5,39 @@ import type { SearchParams } from './types';
 
 type MapType<Value, GoogleValue> = $ObjMap<$Exact<{[key: Value]: string}>, () => GoogleValue>;
 
-/** filter **/
+/** filter * */
 type GoogleFilterValue = void | "partial" | "full" | "free-ebooks" | "paid-ebooks" | "ebooks";
 // Если ошибка типизации, проверить что mapFilter содержит все ключи, перечисленные в FilterValue
 const mapFilter: MapType<FilterValue, GoogleFilterValue> = {
-  "all": undefined,
-  "partial": "partial",
-  "ebooks": "ebooks",
-  "free-ebooks": "free-ebooks",
+  all: undefined,
+  partial: 'partial',
+  ebooks: 'ebooks',
+  'free-ebooks': 'free-ebooks',
 };
 const transformFilter = (value: FilterValue): GoogleFilterValue => mapFilter[value];
 
-/** printType **/
+/** printType * */
 type GooglePrintTypeValue = void | "all" | "books" | "magazines";
 // Если ошибка типизации, проверить что mapPrintType содержит все ключи, перечисленные в PrintTypeValue
 const mapPrintType: MapType<PrintTypeValue, GooglePrintTypeValue> = {
-  "all": undefined,
-  "books": "books",
-  "magazines": "magazines",
+  all: undefined,
+  books: 'books',
+  magazines: 'magazines',
 };
 
 const transformPrintType = (value: PrintTypeValue): GooglePrintTypeValue => mapPrintType[value];
 
-/** sorting **/
+/** sorting * */
 type GoogleOrderByValue = void | "relevance" | "newest";
 // Если ошибка типизации, проверить что mapSorting содержит все ключи, перечисленные в SortingValue
 const mapSorting: MapType<SortingValue, GoogleOrderByValue> = {
-  "relevance": undefined,
-  "newest": "newest",
+  relevance: undefined,
+  newest: 'newest',
 };
 
 const transformSorting = (value: SortingValue): GoogleOrderByValue => mapSorting[value];
 
-/** main transformation **/
+/** main transformation * */
 type GoogleParams = {
   filter: GoogleFilterValue,
   printType: GooglePrintTypeValue,
@@ -56,6 +56,6 @@ function transformSearchParamsToGoogle(searchParams: SearchParams): GoogleParams
     printType: transformPrintType(searchParams.printType),
     q: searchParams.term,
   };
-};
+}
 
 export default transformSearchParamsToGoogle;

@@ -38,7 +38,7 @@ class Header extends Component {
   };
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   isFilterPanelVisible: isFilterPanelVisible(state),
 });
 
@@ -48,5 +48,5 @@ const mapDispatchToProps = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Header);

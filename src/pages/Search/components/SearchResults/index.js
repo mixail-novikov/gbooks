@@ -17,17 +17,15 @@ class SearchResults extends Component {
 
     return (
       <div className={c('SearchResults', className)}>
-        About {count} results ({(time/1000).toFixed(2)} seconds)
+        About {count} results ({(time / 1000).toFixed(2)} seconds)
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   count: selectors.selectResultsCount(state),
   time: selectors.selectResponseTime(state),
 });
 
-export default connect(
-  mapStateToProps,
-)(SearchResults);
+export default connect(mapStateToProps)(SearchResults);

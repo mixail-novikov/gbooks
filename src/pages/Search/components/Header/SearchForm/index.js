@@ -57,7 +57,7 @@ class SearchForm extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   term: selectTerm(state),
 });
 
@@ -69,5 +69,5 @@ const mapDispatchToProps = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SearchForm);

@@ -26,8 +26,8 @@ class SpeechRecognition extends Component {
   }
 
   static defaultProps = {
-    onRecognize: () => {console.log('onRecognize callback default handler')},
-    onClose: () => {console.log('onClose callback default handler');}
+    onRecognize: () => { console.log('onRecognize callback default handler'); },
+    onClose: () => { console.log('onClose callback default handler'); },
   }
 
   constructor() {
@@ -53,12 +53,12 @@ class SpeechRecognition extends Component {
         <div className="SpeechRecognition__content">
           <span className="SpeechRecognition__content-item SpeechRecognition__text">
             {
-              !!result
+              result
               ? <RecognitionResult result={result} isFinish={isFinish} />
               : !noMatch && <RecognitionInvitation />
             }
             { noMatch && <div>Didn't get that. Try again.</div>}
-            </span>
+          </span>
           <MicrophoneButton
             className="SpeechRecognition__content-item SpeechRecognition__microphone"
             onClick={this.handleMicrophoneClick}
@@ -86,14 +86,14 @@ class SpeechRecognition extends Component {
     this.recognition.onspeechstart = () => {
       this._mounted && this.setState({
         speechInProgress: true,
-      })
-    }
+      });
+    };
 
     this.recognition.onspeechend = () => {
       this._mounted && this.setState({
         speechInProgress: false,
-      })
-    }
+      });
+    };
 
     this.recognition.onresult = (event) => {
       const result = event.results[0][0].transcript;
@@ -114,7 +114,7 @@ class SpeechRecognition extends Component {
       if (!this.state.result && this._mounted) {
         this.setState({
           noMatch: true,
-        })
+        });
       }
     };
 
@@ -122,13 +122,13 @@ class SpeechRecognition extends Component {
       this._mounted && this.setState({
         noMatch: false,
         result: '',
-      })
+      });
     };
 
     this.recognition.onnomatch = () => {
       this._mounted && this.setState({
         noMatch: true,
-      })
+      });
     };
   }
 

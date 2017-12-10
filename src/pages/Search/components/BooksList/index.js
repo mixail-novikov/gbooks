@@ -24,10 +24,8 @@ class BooksList extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   books: selectBooks(state),
 });
 
-export default connect(
-  mapStateToProps,
-)(BooksList);
+export default connect(mapStateToProps)(BooksList);

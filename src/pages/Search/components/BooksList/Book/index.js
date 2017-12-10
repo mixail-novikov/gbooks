@@ -20,7 +20,9 @@ class Book extends Component {
   };
 
   render() {
-    const { title, description, imageUrl, link, greenLink, className, authors, year, previewLink } = this.props;
+    const {
+      title, description, imageUrl, link, greenLink, className, authors, year, previewLink,
+    } = this.props;
 
     return (
       <div className={c('Book', className)}>
@@ -34,7 +36,7 @@ class Book extends Component {
           <div className="Book__text">
             {greenLink && <p className="Book__green-link">{greenLink}</p>}
             <BookInfo authors={authors} year={year} previewLink={previewLink} />
-            {description && <p className="Book__description" dangerouslySetInnerHTML={{__html: description}} />}
+            {description && <p className="Book__description" dangerouslySetInnerHTML={{ __html: description }} />}
           </div>
         </div>
       </div>

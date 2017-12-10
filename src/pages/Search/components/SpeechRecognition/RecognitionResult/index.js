@@ -6,21 +6,21 @@ import './style.css';
 let prevInputString;
 function calcParts(inputString, isFinish) {
   if (isFinish) {
-    return [inputString]
+    return [inputString];
   }
 
   if (!prevInputString) {
     prevInputString = inputString;
-    return ['', inputString]
+    return ['', inputString];
   }
 
   let i = 0;
   let commonPart = '';
   while (inputString[i] === prevInputString[i]) {
     commonPart += inputString[i];
-    i+=1;
+    i += 1;
   }
-  let restPart = inputString.substr(i);
+  const restPart = inputString.substr(i);
   prevInputString = inputString;
 
   return [commonPart, restPart];

@@ -22,7 +22,7 @@ class MicrophoneButton extends Component {
         </button>
         {/* <div className="MicrophoneButton__active_indicator" /> */}
       </div>
-    )
+    );
   }
 }
 

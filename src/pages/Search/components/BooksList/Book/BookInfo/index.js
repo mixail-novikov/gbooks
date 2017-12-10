@@ -28,7 +28,7 @@ class BookInfo extends Component {
           {previewLink ? <a target="_blank" href={previewLink}>Preview</a> : 'No Preview'}
         </span>
       </p>
-    )
+    );
   }
 
   renderAuthors() {
