@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { string, func } from 'prop-types';
+import PropTypes from 'prop-types';
 import c from 'classnames';
 import { connect } from 'react-redux';
 
@@ -10,15 +10,32 @@ import './style.css';
 
 class SearchForm extends Component {
   static propTypes = {
-    className: string,
-    term: string,
-    onTermChange: func,
-    onSubmit: func,
+    className: PropTypes.string,
+    term: PropTypes.string,
+    onTermChange: PropTypes.func,
+    onSubmit: PropTypes.func,
+  };
+
+  static defaultProps = {
+    className: '',
+    term: '',
+    onTermChange: () => {},
+    onSubmit: () => {},
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.onSubmit();
+  };
+
+  handleTermChange = (e) => {
+    this.props.onTermChange(e.target.value);
   };
 
   render() {
     const { className, term } = this.props;
 
+    /* eslint-disable jsx-a11y/no-autofocus */
     return (
       <form className={c('SearchForm', className)} onSubmit={this.handleSubmit}>
         <input
@@ -30,20 +47,11 @@ class SearchForm extends Component {
           size="68"
         />
         <button className="SearchForm__button" type="submit">
-          <img className="SearchForm__button-icon" src={searchIcon} />
+          <img alt="Search Button" className="SearchForm__button-icon" src={searchIcon} />
         </button>
       </form>
     );
   }
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.onSubmit();
-  };
-
-  handleTermChange = (e) => {
-    this.props.onTermChange(e.target.value);
-  };
 }
 
 const mapStateToProps = state => ({

@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import c from 'classnames';
-import { string } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import './style.css';
 
-class Intro extends Component {
-  static propTypes = {
-    className: string,
-  };
+const Intro = ({ className }) => (
+  <div className={c('Intro', className)}>
+    <p className="Intro__p">Search the world&amp;s most comprehensive index of full-text books.</p>
+    <a className="Intro__library-link" href="https://books.google.com/books">My library</a>
+  </div>
+);
 
-  render() {
-    return (
-      <div className={c('Intro', this.props.className)}>
-        <p className="Intro__p">Search the world's most comprehensive index of full-text books.</p>
-        <a className="Intro__library-link" href="https://books.google.com/books">My library</a>
-      </div>
-    );
-  }
-}
+Intro.propTypes = {
+  className: PropTypes.string,
+};
+
+Intro.defaultProps = {
+  className: '',
+};
 
 export default Intro;
