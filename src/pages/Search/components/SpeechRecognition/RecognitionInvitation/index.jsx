@@ -1,23 +1,26 @@
 import React, { Component } from 'react';
 
+/* eslint-disable no-underscore-dangle */
 class RecognitionInvitation extends Component {
   state = {
     text: 'Speak now',
   };
 
-  _mounted = true;
-
   componentDidMount() {
     setTimeout(() => {
-      this._mounted && this.setState({
-        text: 'Listening...',
-      });
+      if (this._mounted) {
+        this.setState({
+          text: 'Listening...',
+        });
+      }
     }, 1500);
   }
 
   componentWillUnmount() {
     this._mounted = false;
   }
+
+  _mounted = true;
 
   render() {
     return (
