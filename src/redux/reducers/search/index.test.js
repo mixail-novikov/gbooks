@@ -1,17 +1,17 @@
-import { performSearch, isSearchPage, newSearchSaga, updateSearchStateFromRouter } from './';
-import { call, select, takeLatest } from 'redux-saga/effects';
+import { call, takeLatest } from 'redux-saga/effects';
 import { cloneableGenerator } from 'redux-saga/utils';
-
 import { LOCATION_CHANGE } from 'react-router-redux';
 
-import * as termStuff from './term';
+import { performSearch, isSearchPage, newSearchSaga, updateSearchStateFromRouter } from './';
 
 describe('performSearch', () => {
   const gen = cloneableGenerator(performSearch)();
 
   describe('check search page', () => {
     let searchGen;
-    beforeEach(() => searchGen = gen.clone());
+    beforeEach(() => {
+      searchGen = gen.clone();
+    });
 
     it('must run only on search page', () => {
       expect(searchGen.next().value).toEqual(call(isSearchPage));
