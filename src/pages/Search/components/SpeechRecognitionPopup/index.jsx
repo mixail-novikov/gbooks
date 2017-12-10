@@ -1,21 +1,34 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { setTerm, runSearch } from '../../../../redux/reducers/search';
 import { selectSpeechPopup, closeSpeechPopup } from '../../../../redux/reducers/speech';
 import SpeechRecognition from '../SpeechRecognition';
 
-class SpeechRecognitionPopup extends Component {
-  render() {
-    const { isVisible, onRecognize, onClose } = this.props;
-
-    if (!isVisible) {
-      return null;
-    }
-
-    return <SpeechRecognition onClose={onClose} onRecognize={onRecognize} />;
+const SpeechRecognitionPopup = ({ isVisible, onRecognize, onClose }) => {
+  if (!isVisible) {
+    return null;
   }
-}
+
+  return (
+    <SpeechRecognition
+      onClose={onClose}
+      onRecognize={onRecognize}
+    />
+  );
+};
+
+SpeechRecognitionPopup.propTypes = {
+  isVisible: PropTypes.bool.isRequired,
+  onRecognize: PropTypes.func,
+  onClose: PropTypes.func,
+};
+
+SpeechRecognitionPopup.defaultProps = {
+  onRecognize: () => {},
+  onClose: () => {},
+};
 
 export default connect(
   state => ({
