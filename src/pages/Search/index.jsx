@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import PropTypes from 'prop-types';
 
-import { resultsSelectors, isFilterPanelVisible, runSearch } from '../../redux/reducers/search';
+import { resultsSelectors, isFilterPanelVisible as isFilterPanelVisibleSelector, runSearch } from '../../redux/reducers/search';
 import { selectLoadingStatus } from '../../redux/reducers/search/selectors';
-import { hasBooks } from '../../redux/reducers/books';
+import { hasBooks as hasBooksSelector } from '../../redux/reducers/books';
 
 import Header from './components/Header';
 import SearchResults from './components/SearchResults';
@@ -18,6 +19,16 @@ import spinnerPath from './spinner.svg';
 import './style.css';
 
 class Search extends Component {
+  static propTypes = {
+    noResults: PropTypes.bool.isRequired,
+    hasBooks: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    isFilterPanelVisible: PropTypes.bool.isRequired,
+  }
+
+  componentDidMount() {
+    console.log('mounted');
+  }
   render() {
     const {
       noResults, hasBooks, isLoading, isFilterPanelVisible,
@@ -25,7 +36,7 @@ class Search extends Component {
 
     return (
       <div className="SearchPage">
-        {isLoading && <div className="SearchPage__preloader"><img src={spinnerPath} /></div>}
+        {isLoading && <div className="SearchPage__preloader"><img alt="Loading..." src={spinnerPath} /></div>}
         <Header />
         <div className="SearchPage__content">
           {hasBooks && (
@@ -65,9 +76,9 @@ class Search extends Component {
 
 const mapStateToProps = state => ({
   noResults: resultsSelectors.selectNoResultsStatus(state),
-  hasBooks: hasBooks(state),
+  hasBooks: hasBooksSelector(state),
   isLoading: selectLoadingStatus(state),
-  isFilterPanelVisible: isFilterPanelVisible(state),
+  isFilterPanelVisible: isFilterPanelVisibleSelector(state),
 });
 
 const mapDispatchToProps = {
