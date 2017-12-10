@@ -1,3 +1,4 @@
+// @flow
 import type { FilterValue } from '../../../enums/filter';
 import type { PrintTypeValue } from '../../../enums/printType';
 import type { SortingValue } from '../../../enums/sorting';
@@ -18,7 +19,8 @@ const transformFilter = (value: FilterValue): GoogleFilterValue => mapFilter[val
 
 /** printType * */
 type GooglePrintTypeValue = void | "all" | "books" | "magazines";
-// Если ошибка типизации, проверить что mapPrintType содержит все ключи, перечисленные в PrintTypeValue
+// Если ошибка типизации, проверить что mapPrintType содержит все ключи,
+// перечисленные в PrintTypeValue
 const mapPrintType: MapType<PrintTypeValue, GooglePrintTypeValue> = {
   all: undefined,
   books: 'books',
