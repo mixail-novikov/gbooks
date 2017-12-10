@@ -1,6 +1,6 @@
-import loadBooks from './';
-
 import axios from 'axios';
+
+import loadBooks from './';
 import { transformResponse, searchParamsToGoogle } from './transformers';
 
 jest.mock('axios');
