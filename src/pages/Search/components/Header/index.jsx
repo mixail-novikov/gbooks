@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import LogoImage from '../../../../components/Logo';
 
@@ -8,9 +9,28 @@ import OtherSearchServices from './OtherSearchServices';
 
 import './style.css';
 
-import { setFilterPanelVisibility, isFilterPanelVisible } from '../../../../redux/reducers/search';
+import {
+  setFilterPanelVisibility as setFilterPanelVisibilityAction,
+  isFilterPanelVisible as isFilterPanelVisibleSelector,
+} from '../../../../redux/reducers/search';
 
 class Header extends Component {
+  static propTypes = {
+    setFilterPanelVisibility: PropTypes.func,
+    isFilterPanelVisible: PropTypes.bool,
+  }
+
+  static defaultProps = {
+    setFilterPanelVisibility: () => {},
+    isFilterPanelVisible: false,
+  }
+
+  handleToolsClick = () => {
+    const { setFilterPanelVisibility, isFilterPanelVisible } = this.props;
+
+    setFilterPanelVisibility(!isFilterPanelVisible);
+  };
+
   render() {
     const { isFilterPanelVisible } = this.props;
     return (
@@ -23,27 +43,25 @@ class Header extends Component {
           <div className="SearchHeader__rich-tools">
             <OtherSearchServices className="SearchHeader__other-services" />
             <div className="SearchHeader__tools">
-              <button onClick={this.handleToolsClick}>toggle</button>
+              <button
+                onClick={this.handleToolsClick}
+              >
+                { isFilterPanelVisible ? 'Hide' : 'Show' }
+              </button>
             </div>
           </div>
         </div>
       </div>
     );
   }
-
-  handleToolsClick = () => {
-    const { setFilterPanelVisibility, isFilterPanelVisible } = this.props;
-
-    setFilterPanelVisibility(!isFilterPanelVisible);
-  };
 }
 
 const mapStateToProps = state => ({
-  isFilterPanelVisible: isFilterPanelVisible(state),
+  isFilterPanelVisible: isFilterPanelVisibleSelector(state),
 });
 
 const mapDispatchToProps = {
-  setFilterPanelVisibility,
+  setFilterPanelVisibility: setFilterPanelVisibilityAction,
 };
 
 export default connect(
