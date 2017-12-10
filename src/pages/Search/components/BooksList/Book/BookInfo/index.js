@@ -1,17 +1,33 @@
 import React, { Component } from 'react';
-import { array, string } from 'prop-types';
-import './style.css';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import { connect } from 'react-redux';
 import { getSearchLinkByAuthor } from '../../../../../../redux/reducers/search';
+import './style.css';
 
 class BookInfo extends Component {
   static propTypes = {
-    authors: array,
-    year: string,
-    previewLink: string,
+    authors: PropTypes.arrayOf(PropTypes.string),
+    year: PropTypes.string,
+    previewLink: PropTypes.string,
   };
+
+  static defaultProps = {
+    authors: [],
+    year: '',
+    previewLink: '',
+  };
+
+  renderAuthors() {
+    const { authors } = this.props;
+
+    return authors.map(author => (
+      <span key={author}>
+        <Link to={getSearchLinkByAuthor(author)}>{author}</Link>
+        {' '}
+      </span>
+    ));
+  }
 
   render() {
     const { authors, year, previewLink } = this.props;
@@ -29,17 +45,6 @@ class BookInfo extends Component {
         </span>
       </p>
     );
-  }
-
-  renderAuthors() {
-    const { authors } = this.props;
-
-    return authors.map((author, id) => (
-      <span key={id}>
-        <Link to={getSearchLinkByAuthor(author)}>{author}</Link>
-        {' '}
-      </span>
-    ));
   }
 }
 
