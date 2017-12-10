@@ -12,6 +12,7 @@
     }
   },
   "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "flowtype/define-flow-type": 2
   }
 }
