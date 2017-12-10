@@ -10,8 +10,8 @@ import { selectBooks } from '../../../../redux/reducers/books';
 
 class BooksList extends PureComponent {
   static propTypes = {
-    books: PropTypes.arrayOf(),
-    className: PropTypes.tring,
+    books: PropTypes.arrayOf(PropTypes.object),
+    className: PropTypes.string,
   };
 
   static defaultProps = {

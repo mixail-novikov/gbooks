@@ -13,7 +13,7 @@ import SearchIcon from './SearchIcon';
 class SearchForm extends Component {
   static propTypes = {
     term: PropTypes.string,
-    className: PropTypes.stirng,
+    className: PropTypes.string,
     onSubmit: PropTypes.func,
     onTermChange: PropTypes.func,
     onMicrophoneClick: PropTypes.func,

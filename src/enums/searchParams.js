@@ -3,12 +3,20 @@ import * as sortingEnum from './sorting';
 import * as printType from './printType';
 
 // TODO возможно стоит вынести это куда-то, это не enum, хотя функции-хелперы могут лежать рядом
-const createToRoute = (items, defaultValue) => value => (items.includes(value) && defaultValue !== value ? value : undefined);
-const createToState = (items, defaultValue) => value => (items.includes(value) ? value : defaultValue);
+const createToRoute = (items, defaultValue) => value => (
+  items.includes(value) && defaultValue !== value
+    ? value
+    : undefined
+);
+const createToState = (items, defaultValue) => value => (
+  items.includes(value)
+    ? value
+    : defaultValue
+);
 
 const createToRouteAndToState = (items, defaultValue) => ({
   toRoute: createToRoute(items, defaultValue),
-  toState: createToRoute(items, defaultValue),
+  toState: createToState(items, defaultValue),
 });
 
 export const relation = [{
