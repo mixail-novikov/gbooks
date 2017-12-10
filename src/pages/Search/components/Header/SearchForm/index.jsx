@@ -1,16 +1,41 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import c from 'classnames';
+import PropTypes from 'prop-types';
 
 import { selectTerm, setTerm, runSearch } from '../../../../../redux/reducers/search';
 import { openSpeechPopup } from '../../../../../redux/reducers/speech';
-
 
 import './style.css';
 import microfoneIconPath from './microfone.png';
 import SearchIcon from './SearchIcon';
 
 class SearchForm extends Component {
+  static propTypes = {
+    term: PropTypes.string,
+    className: PropTypes.stirng,
+    onSubmit: PropTypes.func,
+    onTermChange: PropTypes.func,
+    onMicrophoneClick: PropTypes.func,
+  };
+
+  static defaultProps = {
+    term: '',
+    className: '',
+    onSubmit: () => {},
+    onTermChange: () => {},
+    onMicrophoneClick: () => {},
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.onSubmit();
+  };
+
+  handleTermChange = (e) => {
+    this.props.onTermChange(e.target.value);
+  }
+
   render() {
     const { term, onMicrophoneClick, className } = this.props;
 
@@ -32,6 +57,7 @@ class SearchForm extends Component {
             onClick={onMicrophoneClick}
           >
             <img
+              alt="Speech Recognition"
               className="SearchFormInner__search-icon"
               src={microfoneIconPath}
             />
@@ -45,15 +71,6 @@ class SearchForm extends Component {
         </div>
       </form>
     );
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.onSubmit();
-  };
-
-  handleTermChange = (e) => {
-    this.props.onTermChange(e.target.value);
   }
 }
 
