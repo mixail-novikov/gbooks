@@ -1,23 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { Dropdown, DropdownItem } from '../../Dropdown';
 
-class FilterDropdown extends Component {
-  render() {
-    const {
-      value, onChange, defaultValue, items,
-    } = this.props;
+const FilterDropdown = ({
+  value,
+  onChange,
+  defaultValue,
+  items,
+}) => (
+  <Dropdown value={value} defaultValue={defaultValue} onChange={onChange}>
+    {items.map(item => (
+      <DropdownItem key={item.key} value={item.key}>{item.value}</DropdownItem>
+    ))}
+  </Dropdown>
+);
 
-    return (
-      <Dropdown value={value} defaultValue={defaultValue} onChange={onChange}>
-        {items.map(item => (
-          <DropdownItem key={item.key} value={item.key}>{item.value}</DropdownItem>
-        ))}
-      </Dropdown>
-    );
-  }
-}
+FilterDropdown.propTypes = {
+  value: PropTypes.string.isRequired,
+  defaultValue: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 const mapStateToProps = (state, { selector }) => ({
   value: selector(state),

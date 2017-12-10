@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import PropTypes from 'prop-types';
 import c from 'classnames';
 
 import {
@@ -17,38 +17,39 @@ import {
   sorting as sortingEnum,
 } from '../../enums';
 
-import { Dropdown, DropdownItem } from '../Dropdown';
 import FilterDropdown from './FilterDropdown';
 
-class FilterToolbar extends Component {
-  render() {
-    const { className } = this.props;
+const FilterToolbar = ({ className }) => (
+  <div className={c('FilterToolbar', className)}>
+    <FilterDropdown
+      selector={selectSearchFilter}
+      onChange={setSearchFilter}
+      defaultValue={filterEnum.defaultValue}
+      items={filterEnum.items}
+    />
 
-    return (
-      <div className={c('FilterToolbar', className)}>
-        <FilterDropdown
-          selector={selectSearchFilter}
-          onChange={setSearchFilter}
-          defaultValue={filterEnum.defaultValue}
-          items={filterEnum.items}
-        />
+    <FilterDropdown
+      selector={selectPrintType}
+      onChange={setPrintType}
+      defaultValue={printTypeEnum.defaultValue}
+      items={printTypeEnum.items}
+    />
 
-        <FilterDropdown
-          selector={selectPrintType}
-          onChange={setPrintType}
-          defaultValue={printTypeEnum.defaultValue}
-          items={printTypeEnum.items}
-        />
+    <FilterDropdown
+      selector={selectSorting}
+      onChange={setSorting}
+      defaultValue={sortingEnum.defaultValue}
+      items={sortingEnum.items}
+    />
+  </div>
+);
 
-        <FilterDropdown
-          selector={selectSorting}
-          onChange={setSorting}
-          defaultValue={sortingEnum.defaultValue}
-          items={sortingEnum.items}
-        />
-      </div>
-    );
-  }
-}
+FilterToolbar.propTypes = {
+  className: PropTypes.string,
+};
+
+FilterToolbar.defaultProps = {
+  className: '',
+};
 
 export default FilterToolbar;
