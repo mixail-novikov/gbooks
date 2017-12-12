@@ -3,7 +3,7 @@ import c from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { selectors } from '../../../../redux/reducers/search/results';
+import { selectors } from '../../../../redux/reducers/results';
 
 import './style.css';
 

@@ -1,18 +1,19 @@
 import { flow } from 'lodash';
-import * as selectors from '../selectors';
+
+const selectResults = state => state.results;
 
 export const selectResultsCount = flow(
-  selectors.selectSearchResults,
+  selectResults,
   resultsState => resultsState.count,
 );
 
 export const selectResponseTime = flow(
-  selectors.selectSearchResults,
+  selectResults,
   resultsState => resultsState.responseTime,
 );
 
 export const selectNoResults = flow(
-  selectors.selectSearchResults,
+  selectResults,
   resultsState => resultsState.noResults,
 );
 

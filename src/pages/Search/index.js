@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import PropTypes from 'prop-types';
 
-import { resultsSelectors, isFilterPanelVisible as isFilterPanelVisibleSelector, runSearch } from '../../redux/reducers/search';
+import { isFilterPanelVisible as isFilterPanelVisibleSelector, runSearch } from '../../redux/reducers/search';
+import { selectNoResultsStatus } from '../../redux/reducers/results/selectors';
 import { selectLoadingStatus } from '../../redux/reducers/search/selectors';
 import { hasBooks as hasBooksSelector } from '../../redux/reducers/books';
 
@@ -76,7 +77,7 @@ class Search extends Component {
 }
 
 const mapStateToProps = state => ({
-  noResults: resultsSelectors.selectNoResultsStatus(state),
+  noResults: selectNoResultsStatus(state),
   hasBooks: hasBooksSelector(state),
   isLoading: selectLoadingStatus(state),
   isFilterPanelVisible: isFilterPanelVisibleSelector(state),

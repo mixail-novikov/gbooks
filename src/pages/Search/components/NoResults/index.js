@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { resultsSelectors } from '../../../../redux/reducers/search';
+import { selectNoResultsTerm } from '../../../../redux/reducers/results/selectors';
 import './style.css';
 
 const NoResults = ({ searchTerm }) => (
@@ -26,7 +26,7 @@ NoResults.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  searchTerm: resultsSelectors.selectNoResultsTerm(state),
+  searchTerm: selectNoResultsTerm(state),
 });
 
 const mapDispatchToProps = {};

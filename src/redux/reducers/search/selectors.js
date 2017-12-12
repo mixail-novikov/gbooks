@@ -1,12 +1,13 @@
 import { flow } from 'lodash';
-import * as selectors from '../selectors';
+
+const selectSearch = state => state.newSearch;
 
 export const selectLoadingStatus = flow(
-  selectors.selectSearch,
+  selectSearch,
   searchState => searchState.loading,
 );
 
 export const selectSearchResults = flow(
-  selectors.selectSearch,
+  selectSearch,
   searchState => searchState.results,
 );

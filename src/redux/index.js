@@ -1,5 +1,5 @@
 import createStore from './store';
-import runSaga from './saga';
+import runSaga from './sagas';
 import { history } from './router';
 
 export default function configureStore(initialState) {

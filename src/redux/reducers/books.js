@@ -2,8 +2,7 @@ import { createAction, createReducer } from 'redux-act';
 import sanitizeHtml from 'sanitize-html';
 import { get } from 'lodash';
 
-import { resultsLoaded } from './search';
-import { setNoResults } from './search/results';
+import { setNoResults, resultsLoaded } from './results/actions';
 
 const getTitleFromBook = (book) => {
   const { title, subtitle } = get(book, 'volumeInfo', {});
