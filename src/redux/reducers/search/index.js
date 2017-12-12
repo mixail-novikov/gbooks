@@ -1,23 +1,15 @@
-import { createAction, createReducer, batch } from 'redux-act';
+import { createAction, createReducer } from 'redux-act';
 import { combineReducers } from 'redux';
-import * as qs from 'query-string';
-import { get, flow, mapValues, reduce } from 'lodash';
-import { takeLatest, call, put, select } from 'redux-saga/effects';
+import _ from 'lodash';
 
-import { push, LOCATION_CHANGE } from 'react-router-redux';
-import { matchPath } from 'react-router';
-
-import { loadBooks } from '../../../api';
+import { push } from 'react-router-redux';
 
 import { resultsLoaded } from '../results/actions';
-
-import * as selectors from './selectors';
 
 import {
   filter as filterEnum,
   sorting as sortingEnum,
   printType as printTypeEnum,
-  searchParams as searchParamsEnum,
 } from '../../../enums';
 
 import loadingReducer, {
@@ -28,16 +20,6 @@ import loadingReducer, {
 export { startLoading, finishLoading };
 
 export const runSearch = createAction('run search');
-
-const selectSearch = state => state.newSearch || {};
-const selectSearchResults = flow(selectSearch, searchState => searchState.results || {});
-
-// export const selectResponseTime = flow(selectSearchResults, resultsState => resultsState.responseTime || 0);
-
-// export const selectResultsCount = flow(selectSearchResults, resultsState => resultsState.resultsCount || 0);
-
-// export const selectNoResultsStatus = (state) => state.newSearch.results.noResults.status;
-// export const selectNoResultsTerm = (state) => state.newSearch.results.noResults.term;
 
 export const setFilterPanelVisibility = createAction('set filter panel visibility');
 
@@ -72,8 +54,9 @@ export const selectPrintType = createSearchParamSelector('printType');
 export const setTerm = createSearchParamSetter('term');
 export const selectTerm = createSearchParamSelector('term');
 
-export const setSearchParams = createAction('set search params', (searchState) => {
-  return mapValues(searchState, (value, key) => {
+export const setSearchParams = createAction('set search params', searchState => _.mapValues(
+  searchState,
+  (value, key) => {
     switch (key) {
       case 'filter':
         return filterEnum.itemValues.includes(value) ? value : filterEnum.defaultValue;
@@ -84,8 +67,9 @@ export const setSearchParams = createAction('set search params', (searchState) =
       default:
         return value;
     }
-  });
-});
+  },
+));
+
 export const selectSearchParams = state => state.newSearch.searchParams;
 
 const searchParamsReducer = createReducer({
@@ -99,12 +83,9 @@ const searchParamsReducer = createReducer({
 
 export default combineReducers({
   searchParams: searchParamsReducer,
-  // results: createResultsReducer(resultsLoaded),
   loading: loadingReducer,
   filterPanel: filterPanelReducer,
 });
-
-export const isFilterPanelVisible = state => (state.newSearch.filterPanel.touched ? state.newSearch.filterPanel.visible : isFilterPanelVisibleInnerSelector(state));
 
 export const isFilterPanelVisibleInnerSelector = (state) => {
   const isPrintTypeSelected = selectPrintType(state) !== printTypeEnum.defaultValue;
@@ -114,14 +95,16 @@ export const isFilterPanelVisibleInnerSelector = (state) => {
   return isPrintTypeSelected || isFilterSelected || isSortingSelected;
 };
 
-export const goToSearchPage = createAction('go to search page');
+export const isFilterPanelVisible = state => (
+  state.newSearch.filterPanel.touched
+    ? state.newSearch.filterPanel.visible
+    : isFilterPanelVisibleInnerSelector(state)
+);
 
-//
-// function* searchPageSaga() {
-//   takeLatest([
-//     () =>
-//   ])
-// }
+export const goToSearchPage = term => push({
+  location: '/search',
+  search: `trm=${encodeURIComponent(term)}`,
+});
 
 export const dropdownFilterChanged = action => action.type === setSearchParamByKey.getType() && action.payload.key !== 'term';
 

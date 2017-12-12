@@ -32,6 +32,7 @@ function* updateRouterFromSearchState() {
   const search = transformFromSearchParamsToRoute(searchParams, currentRouterSearch);
 
   yield put(push({
+    pathname: '/search',
     search: qs.stringify(search),
   }));
 }
