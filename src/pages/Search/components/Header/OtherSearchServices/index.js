@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import './style.css';
 
-import { selectTerm } from '../../../../../redux/reducers/search';
+import { selectCurrentTerm } from '../../../../../redux/reducers/results/selectors';
 
 const getUrl = (term, tab) => `https://www.google.com/search?q=${encodeURIComponent(term)}${tab ? `&tbm=${tab}` : ''}`;
 const getServices = term => ([{
@@ -52,7 +52,7 @@ OtherSearchServices.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  term: selectTerm(state),
+  term: selectCurrentTerm(state),
 });
 
 export default connect(mapStateToProps)(OtherSearchServices);

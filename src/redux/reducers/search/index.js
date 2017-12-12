@@ -2,8 +2,6 @@ import { createAction, createReducer } from 'redux-act';
 import { combineReducers } from 'redux';
 import _ from 'lodash';
 
-import { push } from 'react-router-redux';
-
 import { resultsLoaded } from '../results/actions';
 
 import {
@@ -100,11 +98,6 @@ export const isFilterPanelVisible = state => (
     ? state.newSearch.filterPanel.visible
     : isFilterPanelVisibleInnerSelector(state)
 );
-
-export const goToSearchPage = term => push({
-  location: '/search',
-  search: `trm=${encodeURIComponent(term)}`,
-});
 
 export const dropdownFilterChanged = action => action.type === setSearchParamByKey.getType() && action.payload.key !== 'term';
 

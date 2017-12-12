@@ -6,8 +6,8 @@ import { setTerm, runSearch } from '../../../../redux/reducers/search';
 import { selectSpeechPopup, closeSpeechPopup } from '../../../../redux/reducers/speech';
 import SpeechRecognition from '../SpeechRecognition';
 
-const SpeechRecognitionPopup = ({ isVisible, onRecognize, onClose }) => {
-  if (!isVisible) {
+const SpeechRecognitionPopup = ({ visible, onRecognize, onClose }) => {
+  if (!visible) {
     return null;
   }
 
@@ -20,7 +20,7 @@ const SpeechRecognitionPopup = ({ isVisible, onRecognize, onClose }) => {
 };
 
 SpeechRecognitionPopup.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool.isRequired,
   onRecognize: PropTypes.func,
   onClose: PropTypes.func,
 };
@@ -32,7 +32,7 @@ SpeechRecognitionPopup.defaultProps = {
 
 export default connect(
   state => ({
-    isVisible: selectSpeechPopup(state),
+    visible: selectSpeechPopup(state),
   }),
   dispatch => ({
     onRecognize: (value) => {

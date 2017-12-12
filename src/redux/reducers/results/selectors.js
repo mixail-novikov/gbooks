@@ -12,17 +12,17 @@ export const selectResponseTime = flow(
   resultsState => resultsState.responseTime,
 );
 
-export const selectNoResults = flow(
+export const selectNoResultsStatus = flow(
   selectResults,
   resultsState => resultsState.noResults,
 );
 
-export const selectNoResultsStatus = flow(
-  selectNoResults,
-  noResultsState => noResultsState.status,
+const selectCurrentParams = flow(
+  selectResults,
+  resultsState => resultsState.currentParams,
 );
 
-export const selectNoResultsTerm = flow(
-  selectNoResults,
-  noResultsState => noResultsState.term,
+export const selectCurrentTerm = flow(
+  selectCurrentParams,
+  currentParamsState => currentParamsState.term,
 );
