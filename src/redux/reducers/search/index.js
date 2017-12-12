@@ -2,8 +2,6 @@ import { createAction, createReducer } from 'redux-act';
 import { combineReducers } from 'redux';
 import _ from 'lodash';
 
-import { resultsLoaded } from '../results/actions';
-
 import {
   filter as filterEnum,
   sorting as sortingEnum,
@@ -18,22 +16,6 @@ import loadingReducer, {
 export { startLoading, finishLoading };
 
 export const runSearch = createAction('run search');
-
-export const setFilterPanelVisibility = createAction('set filter panel visibility');
-
-const filterPanelVisibleReducer = createReducer({
-  [setFilterPanelVisibility]: (state, value) => value,
-}, false);
-
-const filterPanelTouchedReducer = createReducer({
-  [setFilterPanelVisibility]: () => true,
-  [resultsLoaded]: () => false,
-}, false);
-
-const filterPanelReducer = combineReducers({
-  visible: filterPanelVisibleReducer,
-  touched: filterPanelTouchedReducer,
-});
 
 const setSearchParamByKey = createAction('set search param', (key, value) => ({ key, value }));
 
@@ -82,22 +64,7 @@ const searchParamsReducer = createReducer({
 export default combineReducers({
   searchParams: searchParamsReducer,
   loading: loadingReducer,
-  filterPanel: filterPanelReducer,
 });
-
-export const isFilterPanelVisibleInnerSelector = (state) => {
-  const isPrintTypeSelected = selectPrintType(state) !== printTypeEnum.defaultValue;
-  const isFilterSelected = selectSearchFilter(state) !== filterEnum.defaultValue;
-  const isSortingSelected = selectSorting(state) !== sortingEnum.defaultValue;
-
-  return isPrintTypeSelected || isFilterSelected || isSortingSelected;
-};
-
-export const isFilterPanelVisible = state => (
-  state.newSearch.filterPanel.touched
-    ? state.newSearch.filterPanel.visible
-    : isFilterPanelVisibleInnerSelector(state)
-);
 
 export const dropdownFilterChanged = action => action.type === setSearchParamByKey.getType() && action.payload.key !== 'term';
 

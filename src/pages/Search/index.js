@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import PropTypes from 'prop-types';
 
-import { isFilterPanelVisible as isFilterPanelVisibleSelector, runSearch } from '../../redux/reducers/search';
+import { runSearch } from '../../redux/reducers/search';
+import { selectFilterPanelVisibility } from '../../redux/reducers/filterPanel';
 import { selectNoResultsStatus } from '../../redux/reducers/results/selectors';
 import { selectLoadingStatus } from '../../redux/reducers/search/selectors';
 import { hasBooks as hasBooksSelector } from '../../redux/reducers/books';
@@ -24,7 +25,7 @@ class Search extends Component {
     noResults: PropTypes.bool.isRequired,
     hasBooks: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    isFilterPanelVisible: PropTypes.bool.isRequired,
+    filterPanelVisible: PropTypes.bool.isRequired,
   }
 
   componentDidMount() {
@@ -33,7 +34,7 @@ class Search extends Component {
 
   render() {
     const {
-      noResults, hasBooks, isLoading, isFilterPanelVisible,
+      noResults, hasBooks, isLoading, filterPanelVisible,
     } = this.props;
 
     return (
@@ -51,7 +52,7 @@ class Search extends Component {
                   transitionLeave
                   transitionLeaveTimeout={220}
                 >
-                  {!isFilterPanelVisible && <SearchResults className="SearchPage__results-count" />}
+                  {!filterPanelVisible && <SearchResults className="SearchPage__results-count" />}
                 </ReactCSSTransitionGroup>
                 <div className="SearchPage__filter-panel-wrapper">
                   <ReactCSSTransitionGroup
@@ -61,7 +62,7 @@ class Search extends Component {
                     transitionLeave
                     transitionLeaveTimeout={220}
                   >
-                    {isFilterPanelVisible && <FilterToolbar className="SearchPage__filter-panel" />}
+                    {filterPanelVisible && <FilterToolbar className="SearchPage__filter-panel" />}
                   </ReactCSSTransitionGroup>
                 </div>
               </div>
@@ -80,7 +81,7 @@ const mapStateToProps = state => ({
   noResults: selectNoResultsStatus(state),
   hasBooks: hasBooksSelector(state),
   isLoading: selectLoadingStatus(state),
-  isFilterPanelVisible: isFilterPanelVisibleSelector(state),
+  filterPanelVisible: selectFilterPanelVisibility(state),
 });
 
 const mapDispatchToProps = {

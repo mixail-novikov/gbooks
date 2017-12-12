@@ -12,6 +12,7 @@
     }
   },
   "rules": {
+    "import/prefer-default-export": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "flowtype/define-flow-type": 2,
     "jsx-a11y/anchor-is-valid": [ "error", {

@@ -10,29 +10,30 @@ import OtherSearchServices from './OtherSearchServices';
 import './style.css';
 
 import {
-  setFilterPanelVisibility as setFilterPanelVisibilityAction,
-  isFilterPanelVisible as isFilterPanelVisibleSelector,
-} from '../../../../redux/reducers/search';
+  setFilterPanelVisibility,
+  selectFilterPanelVisibility,
+} from '../../../../redux/reducers/filterPanel';
 
 class Header extends Component {
   static propTypes = {
-    setFilterPanelVisibility: PropTypes.func,
+    onToggleFilterPanel: PropTypes.func,
     isFilterPanelVisible: PropTypes.bool,
   }
 
   static defaultProps = {
-    setFilterPanelVisibility: () => {},
+    onToggleFilterPanel: () => {},
     isFilterPanelVisible: false,
   }
 
   handleToolsClick = () => {
-    const { setFilterPanelVisibility, isFilterPanelVisible } = this.props;
+    const { onToggleFilterPanel, isFilterPanelVisible } = this.props;
 
-    setFilterPanelVisibility(!isFilterPanelVisible);
+    onToggleFilterPanel(!isFilterPanelVisible);
   };
 
   render() {
     const { isFilterPanelVisible } = this.props;
+
     return (
       <div className="SearchHeader">
         <div className="SearchHeader__logo-holder">
@@ -57,11 +58,11 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => ({
-  isFilterPanelVisible: isFilterPanelVisibleSelector(state),
+  isFilterPanelVisible: selectFilterPanelVisibility(state),
 });
 
 const mapDispatchToProps = {
-  setFilterPanelVisibility: setFilterPanelVisibilityAction,
+  onToggleFilterPanel: setFilterPanelVisibility,
 };
 
 export default connect(
