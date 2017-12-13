@@ -14,8 +14,8 @@ import {
   startLoading,
   finishLoading,
 } from '../../reducers/search';
-import { selectSearch } from '../../reducers/router/selectors';
-import { resultsLoaded, setNoResults } from '../../reducers/results/actions';
+import { selectSearch } from '../../reducers/router';
+import { resultsLoaded, setNoResults } from '../../reducers/results';
 
 function transformFromSearchParamsToRoute(searchParams, initObj = {}) {
   return _.reduce(searchParamsEnum.relation, (res, obj) => {
