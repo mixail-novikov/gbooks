@@ -52,14 +52,21 @@ export const setSearchParams = createAction('set search params', searchState => 
 
 export const selectSearchParams = state => state.newSearch.searchParams;
 
-const searchParamsReducer = createReducer({
-  [setSearchParamByKey]: (state, { key, value }) => ({ ...state, [key]: value }),
-  [setSearchParams]: (state, newState) => newState,
-}, {
+const searchParamsInitialState = {
   filter: filterEnum.defaultValue,
   sorting: sortingEnum.defaultValue,
   printType: printTypeEnum.defaultValue,
-});
+};
+
+const searchParamsReducer = createReducer({
+  [setSearchParamByKey]: (state, { key, value }) => ({ ...state, [key]: value }),
+  [setSearchParams]: (state, newState) => newState,
+}, searchParamsInitialState);
+
+export const isSearchParamsEqualDefaults = (
+  searchParams,
+  defaults = searchParamsInitialState,
+) => _.every(defaults, (value, key) => searchParams[key] === value);
 
 export default combineReducers({
   searchParams: searchParamsReducer,
