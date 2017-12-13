@@ -17,6 +17,8 @@ import {
 import { selectSearch } from '../../reducers/router';
 import { resultsLoaded, setNoResults } from '../../reducers/results';
 
+const SEARCH_PAGE_URI = '/search';
+
 function transformFromSearchParamsToRoute(searchParams, initObj = {}) {
   return _.reduce(searchParamsEnum.relation, (res, obj) => {
     const { routeKey, stateKey, toRoute } = obj;
@@ -32,7 +34,7 @@ function* updateRouterFromSearchState() {
   const search = transformFromSearchParamsToRoute(searchParams, currentRouterSearch);
 
   yield put(push({
-    pathname: '/search',
+    pathname: SEARCH_PAGE_URI,
     search: qs.stringify(search),
   }));
 }
@@ -57,7 +59,7 @@ function listenForSearchPageLocationChange({ type, payload }) {
   }
 
   const { pathname } = payload;
-  const match = matchPath(pathname, { path: '/search' });
+  const match = matchPath(pathname, { path: SEARCH_PAGE_URI });
 
   return match && match.isExact;
 }
