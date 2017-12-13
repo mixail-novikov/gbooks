@@ -2,6 +2,7 @@
   "name": "gbooks",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://mixail-novikov.github.io/gbooks",
   "dependencies": {
     "axios": "^0.17.1",
     "classnames": "^2.2.5",

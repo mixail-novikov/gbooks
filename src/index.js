@@ -6,7 +6,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import './index.css';
 
 import Pages from './pages';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 import createStore from './redux';
 
 const { store, runSaga, history } = createStore();
@@ -21,4 +21,4 @@ ReactDOM.render(
   , document.getElementById('root'),
 );
 
-registerServiceWorker();
+// registerServiceWorker();
