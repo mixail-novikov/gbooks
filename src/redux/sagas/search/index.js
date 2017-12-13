@@ -9,10 +9,10 @@ import { loadBooks } from '../../../api';
 import {
   runSearch,
   setSearchParams,
-  dropdownFilterChanged,
   selectSearchParams,
   startLoading,
   finishLoading,
+  setSearchParamByKey,
 } from '../../reducers/search';
 import { selectSearch } from '../../reducers/router';
 import { resultsLoaded, setNoResults } from '../../reducers/results';
@@ -88,6 +88,8 @@ function* onSearchPageLocationChange() {
   yield call(updateSearchStateFromRouter);
   yield call(performSearch);
 }
+
+const dropdownFilterChanged = action => action.type === setSearchParamByKey.getType() && action.payload.key !== 'term';
 
 const listenForRunSearch = [
   runSearch.getType(),
