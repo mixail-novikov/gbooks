@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import c from 'classnames';
 import { connect } from 'react-redux';
 
-import { selectTerm, setTerm, runSearch } from '../../../../redux/reducers/search';
+import { selectTerm, setTerm, runSearch } from '../../../redux/reducers/search';
 
-import searchIcon from './search.png';
-import './style.css';
+import Input from './Input';
+import Button from './Button';
+import Form from './Form';
 
 class SearchForm extends Component {
   static propTypes = {
@@ -35,21 +35,17 @@ class SearchForm extends Component {
   render() {
     const { className, term } = this.props;
 
-    /* eslint-disable jsx-a11y/no-autofocus */
     return (
-      <form className={c('SearchForm', className)} onSubmit={this.handleSubmit}>
-        <input
+      <Form className={className} onSubmit={this.handleSubmit}>
+        <Input
           value={term}
           onChange={this.handleTermChange}
-          className="SearchForm__input"
           autoFocus
           type="text"
           size="68"
         />
-        <button className="SearchForm__button" type="submit">
-          <img alt="Search Button" className="SearchForm__button-icon" src={searchIcon} />
-        </button>
-      </form>
+        <Button type="submit" />
+      </Form>
     );
   }
 }
